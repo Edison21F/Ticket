@@ -2,8 +2,8 @@
 export default async function Inicio() {
 
     return (
-      <ul>
-        Dashboard
-      </ul>
+      <div className="login">
+        home
+      </div>
     )
   }
