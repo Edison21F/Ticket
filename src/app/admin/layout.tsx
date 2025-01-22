@@ -66,7 +66,7 @@ export default function RootLayout({
     <html lang="en" >
       <body className="bg-[#1D1E2C] text-white">
         <div className="flex min-h-screen">
-          <SideNav items={navigationItems} className="hidden lg:block" />
+          <SideNav items={navigationItems} />
           
           <div className="flex-1">
             <TopBar />
