@@ -76,7 +76,7 @@ const ModernTicketListing = () => {
   return (
     <div className="container">
       <div className="header flex items-center justify-between">
-        <h1>E-TICKETS</h1>
+        <h1></h1>
         <div className="relative w-64">
           <input
             type="text"

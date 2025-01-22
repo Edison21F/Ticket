@@ -27,7 +27,7 @@ const navigationItems = [
   {
     label: 'Tickets',
     items: [
-      { label: 'Listado de Tickets', icon: 'pi pi-fw pi-ticket', routerLink: ['/tickets'] },
+      { label: 'Listado de Tickets', icon: 'pi pi-fw pi-ticket', routerLink: ['/admin/listadotickets'] },
       { label: 'Crear Ticket', icon: 'pi pi-fw pi-plus', routerLink: ['/tickets/create'] }
     ]
   },
