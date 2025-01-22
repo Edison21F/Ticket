@@ -27,14 +27,14 @@ const navigationItems = [
   {
     label: 'Tickets',
     items: [
-      { label: 'Listado de Tickets', icon: 'pi pi-fw pi-ticket', routerLink: ['/tickets'] },
+      { label: 'Listado de Tickets', icon: 'pi pi-fw pi-ticket', routerLink: ['/admin/listadotickets'] },
       { label: 'Crear Ticket', icon: 'pi pi-fw pi-plus', routerLink: ['/tickets/create'] }
     ]
   },
   {
     label: 'Pagos y Transacciones',
     items: [
-      { label: 'Gestión de Pagos', icon: 'pi pi-fw pi-wallet', routerLink: ['/payments'] }
+      { label: 'Gestión de Pagos', icon: 'pi pi-fw pi-wallet', routerLink: ['/admin/payments'] }
     ]
   },
   {
