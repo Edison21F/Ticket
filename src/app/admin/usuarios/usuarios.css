@@ -1,0 +1,433 @@
+.container {
+    padding: 20px;
+    text-align: center;
+    background-color: #111827;
+    min-height: 100vh;
+    overflow: hidden; /* Evita el desbordamiento fuera de la pantalla */
+    margin-left: 262px;
+    
+    /* Agregar bordes */
+    border: 3px solid #141414; /* Borde de 3px de grosor, color naranja */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Ajuste del margen para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+        padding: 10px;
+    }
+}
+
+.header {
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.searchContainer {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.searchInput {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+    border-color: #ff8c00;
+}
+
+@media (max-width: 768px) {
+    .searchInput {
+        width: 100%; /* Ajuste al ancho completo en pantallas pequeñas */
+    }
+}
+
+.cardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    overflow: hidden; /* Asegura que las tarjetas no se desborden */
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #ff8c00, #ff00ff);
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    position: relative;
+    text-align: center;
+}
+
+.cardHeader::after,
+.cardHeader::before {
+    content: '';
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.cardHeader::before {
+    right: 10px;
+}
+
+.cardHeader::after {
+    right: 50px;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .cardHeader {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+.cardTitle {
+    background: linear-gradient(90deg, #ff8c00, #ff00ff);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%;
+}
+
+.cardTitle::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+
+.cardTitle::before {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+
+/* Cartas Responsivas */
+@media (max-width: 768px) {
+    .cardContainer {
+        flex-direction: column;
+        gap: 10px; /* Espaciado menor entre las tarjetas */
+    }
+
+    .cardTitle {
+        font-size: 14px; /* Tamaño más pequeño para pantallas pequeñas */
+    }
+}
+/* FIN DEL PRIMER APARTADO DE CARTAS */
+
+
+
+/* INICIO DE CARTAS GENERALES */
+.card {
+    width: 300px;
+    height: 450px;
+    perspective: 1000px; /* Necesario para darle efecto de profundidad */
+    margin: 20px;
+}
+
+.cardInner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d; /* Necesario para el flip 3D */
+    transition: transform 0.6s;
+}
+
+.card:hover .cardInner {
+    transform: rotateY(180deg); /* Al hacer hover, se rota la tarjeta */
+}
+
+.cardFront, .cardBack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Asegura que el contenido trasero no sea visible cuando se da vuelta */
+}
+
+.cardFront {
+    background: linear-gradient(135deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0,
+    linear-gradient(225deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0;
+    background-size: 20px 20px; /* Espaciado de las líneas */
+    background-color: #141414; /* Fondo gris muy sutil */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px rgba(238, 164, 6, 0.5); /* Borde brillante de color amarillo */
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.cardFront:hover {
+    box-shadow: 0 0 20px 5px rgba(255, 255, 0, 1); /* Brillo más intenso al hacer hover */
+}
+
+.cardBack {
+    background: linear-gradient(
+        135deg,
+        rgba(169, 169, 169, 0.1) 25%,
+        transparent 25%
+      ) 0 0,
+      linear-gradient(225deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0;
+    background-size: 20px 20px;
+    background-color: #141414;
+    transform: rotateY(180deg); /* Rotación para la parte trasera */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    padding: 0; /* Elimina el relleno que pueda afectar la altura del título */
+    position: relative; /* Asegura que el contenido del título esté bien posicionado */
+}
+
+.cardBack .cardTitle {
+    margin-bottom: 10px;
+    border-radius: 8px 8px 0 0;
+    position: absolute; /* Fija la posición del encabezado */
+    top: 0; /* Coloca el encabezado en la parte superior */
+    left: 0;
+    width: 100%;
+}
+
+
+.image {
+    width: 100%;
+    height: 250px; /* Ajusta la altura de la imagen */
+    object-fit: cover; /* Ajusta la imagen para llenar el área sin distorsión */
+    border-radius: 8px;
+    margin-bottom: 27px;
+    object-position: center center; /* Centra la imagen */
+}
+
+.cardContent {
+    padding: 10px;
+    color: #fff;
+}
+
+.cardContent h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.cardContent p {
+    font-size: 14px;
+    color: #ccc;
+    margin: 5px 0;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 105px;
+}
+
+.editButton, .deleteButton, .resetButton, .toggleButton {
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.editButton {
+    background-color: #ffa500;
+    color: white;
+    border: none;
+}
+
+.editButton:hover {
+    background-color: #ffd27f;
+}
+
+.deleteButton {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+.deleteButton:hover {
+    background-color: #ff7471;
+}
+
+.resetButton {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+}
+
+.resetButton:hover {
+    background-color: #007bb5;
+}
+
+.toggleButton {
+    background-color: #ffa500;
+    color: white;
+    border: none;
+}
+
+.toggleButton:hover {
+    background-color: #ff8c00;
+}
+
+/* FIN DE CARTAS GENERALES */
+
+
+
+
+
+/* INICIO DE CARTAS DE EDITAR Y ELIMINAR */
+   .editCard {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 400px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Título de la tarjeta */
+  .editCard h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para los labels */
+  .editCard label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    transition: color 0.3s;
+  }
+  
+  /* Color naranja para el label cuando se selecciona */
+  .editCard input:focus + label,
+  .editCard input:active + label {
+    color: #ff6600; /* Naranja */
+  }
+  
+  /* Estilos para los inputs */
+  .editCard input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  /* Estilo de los inputs al hacer foco */
+  .editCard input:focus {
+    border-color: #ffa500; /* Naranja */
+    box-shadow: 0 0 5px rgba(255, 102, 0, 0.6);
+  }
+  
+  /* Botones de la tarjeta */
+  .editCardButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Estilos para los botones */
+  .editCardButtons button {
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #ffa500;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .editCardButtons button:hover {
+    background-color: #ffd27f;
+  }
+  
+  /* Estilos para el fondo del contenedor de edición (oscurecimiento del fondo cuando está activo) */
+  .editCardOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+  }
+  
+  /* Estilos generales para las tarjetas de usuario */
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .deleteButton {
+    padding: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .deleteButton:hover {
+    background-color: #ff7471;
+  }
+  
