@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import './usuarios.css'; // Importamos el archivo de estilo global
 
-
 // Definimos la interfaz para el tipo de usuario
 interface Usuario {
   nombre: string;
@@ -14,7 +13,7 @@ interface Usuario {
   imagen: string;
 }
 
-const UsuariosPage = () => {
+const UsuariosPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
   const [usuarios, setUsuarios] = useState<Usuario[]>([
     {
@@ -34,57 +33,41 @@ const UsuariosPage = () => {
       imagen: 'https://vivolabs.es/wp-content/uploads/2022/03/perfil-mujer-vivo.png',
     },
     {
-      nombre: 'Pepe Fulano',
-      email: 'pepefulano@example.com',
-      fechaRegistro: '18/02/2025',
+      nombre: 'Juan Pérez',
+      email: 'juan.perez@example.com',
+      fechaRegistro: '01/01/2025',
       estado: 'Activo',
-      rol: 'Usuario',
-      imagen: 'https://st3.depositphotos.com/12985790/15794/i/450/depositphotos_157947226-stock-photo-man-looking-at-camera.jpg',
+      rol: 'Administrador',
+      imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUcNdEFR29DXre9LTLKm6c4tVsc8hODLXlYg&s',
     },
     {
-      nombre: 'Jombriel Choke',
-      email: 'jombriefchoke@example.com',
-      fechaRegistro: '28/03/2025',
+      nombre: 'María López',
+      email: 'maria.lopez@example.com',
+      fechaRegistro: '15/02/2025',
       estado: 'Inactivo',
       rol: 'Usuario',
-      imagen: 'https://st4.depositphotos.com/1017228/20766/i/450/depositphotos_207663178-stock-photo-image-happy-young-man-standing.jpg',
+      imagen: 'https://vivolabs.es/wp-content/uploads/2022/03/perfil-mujer-vivo.png',
     },
     {
-        nombre: 'Dana Quimbita',
-        email: 'danaQ@example.com',
-        fechaRegistro: '28/03/2025',
-        estado: 'Inactivo',
-        rol: 'Usuario',
-        imagen: 'https://imagenes.20minutos.es/files/admin_user_avatar/files/fp/uploads/imagenes/2020/09/10/seray-kaya.r_d.693-430-880.jpeg',
-      },
-      {
-        nombre: 'Steven Farinango',
-        email: 'steven11@example.com',
-        fechaRegistro: '28/03/2025',
-        estado: 'Inactivo',
-        rol: 'Usuario',
-        imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH_q5YVaicMKAFJPdvF-CLVHBleCBR4cq64Q&s',
-      },
-      {
-        nombre: 'Diego Ortiz',
-        email: 'diegoO@example.com',
-        fechaRegistro: '28/03/2025',
-        estado: 'Inactivo',
-        rol: 'Usuario',
-        imagen: 'https://st2.depositphotos.com/3776273/42867/i/450/depositphotos_428678700-stock-photo-close-up-of-handsome-adult.jpg',
-      },
-      {
-        nombre: 'Samantha Lima',
-        email: 'diegoO@example.com',
-        fechaRegistro: '28/03/2025',
-        estado: 'Inactivo',
-        rol: 'Usuario',
-        imagen: 'https://cdn.aglty.io/scotiabank-chile/sitio-publico/2024/iniciativa-mujeres/planes-lidera-mujer.png',
-      },
-    // Agrega más usuarios si es necesario
+      nombre: 'Juan Pérez',
+      email: 'juan.perez@example.com',
+      fechaRegistro: '01/01/2025',
+      estado: 'Activo',
+      rol: 'Administrador',
+      imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUcNdEFR29DXre9LTLKm6c4tVsc8hODLXlYg&s',
+    },
+    {
+      nombre: 'María López',
+      email: 'maria.lopez@example.com',
+      fechaRegistro: '15/02/2025',
+      estado: 'Inactivo',
+      rol: 'Usuario',
+      imagen: 'https://vivolabs.es/wp-content/uploads/2022/03/perfil-mujer-vivo.png',
+    },
+    // ... otros usuarios
   ]);
 
-  const [editingUser, setEditingUser] = useState<Usuario | null>(null); // Estado para controlar si un usuario está siendo editado
+  const [editingUser , setEditingUser ] = useState<Usuario | null>(null); // Estado para controlar si un usuario está siendo editado
   const [editedData, setEditedData] = useState<Omit<Usuario, 'imagen' | 'fechaRegistro'> | null>(null); // Omitimos campos no editables
 
   // Filtramos los usuarios por nombre en función del término de búsqueda
@@ -94,17 +77,17 @@ const UsuariosPage = () => {
 
   // Función para editar un usuario
   const handleEdit = (usuario: Usuario) => {
-    setEditingUser(usuario);
+    setEditingUser (usuario);
     setEditedData({ nombre: usuario.nombre, email: usuario.email, estado: usuario.estado, rol: usuario.rol });
   };
 
   // Función para guardar los cambios de edición
   const handleSaveEdit = () => {
-    if (editedData && editingUser) {
+    if (editedData && editingUser ) {
       setUsuarios(usuarios.map(user =>
-        user === editingUser ? { ...user, ...editedData } : user
+        user === editingUser  ? { ...user, ...editedData } : user
       ));
-      setEditingUser(null); // Cerrar la tarjeta de edición
+      setEditingUser (null); // Cerrar la tarjeta de edición
     }
   };
 
@@ -115,7 +98,7 @@ const UsuariosPage = () => {
 
   return (
     <div className="container">
-      <div className="cardHeader">Gestión de Usuarios</div>
+      <h1 className="header">Gestión de Usuarios</h1>
       <div className="searchContainer">
         <input
           type="text"
@@ -127,7 +110,7 @@ const UsuariosPage = () => {
       </div>
 
       {/* Tarjeta de edición flotante */}
-      {editingUser && (
+      {editingUser  && (
         <div className="editCard">
           <h2>Editar Usuario</h2>
           <label>
@@ -164,7 +147,7 @@ const UsuariosPage = () => {
           </label>
           <div className="editCardButtons">
             <button onClick={handleSaveEdit}>Guardar Cambios</button>
-            <button onClick={() => setEditingUser(null)}>Cancelar</button>
+            <button onClick={() => setEditingUser (null)}>Cancelar</button>
           </div>
         </div>
       )}
@@ -175,7 +158,6 @@ const UsuariosPage = () => {
             <div className="cardInner">
               {/* Parte delantera */}
               <div className="cardFront">
-                {/* Encabezado con el nombre del usuario */}
                 <div className="cardTitle">{usuario.nombre}</div>
                 <img
                   src={usuario.imagen}
@@ -200,7 +182,6 @@ const UsuariosPage = () => {
 
               {/* Parte trasera */}
               <div className="cardBack">
-                {/* Encabezado con el título "Acciones" */}
                 <div className="cardTitle">Acciones</div>
                 <div className="buttonContainer">
                   <button className="editButton" onClick={() => handleEdit(usuario)}>Editar</button>

@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    color: #ffffff;
+  }
+  
+  .searchInput {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+  }
+  
+  /* Nuevo estilo para tickets con forma de ticket y efecto 3D */
+  .ticket {
+    position: relative;
+    background: #1a1a1a;
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+  }
+  
+  .ticket::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #121212;
+    border-radius: 50%;
+    top: 50%;
+    left: -20px;
+    transform: translateY(-50%);
+    box-shadow: 
+      370px 0 0 #121212,
+      370px 0 0 15px rgba(255, 255, 255, 0.05);
+  }
+  
+  .ticket::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  }
+  
+  .ticket:hover {
+    transform: translateY(-5px) rotateX(10deg);
+    box-shadow: 
+      0 15px 25px rgba(0, 0, 0, 0.5),
+      0 5px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .ticket-header {
+    position: relative;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    z-index: 2;
+  }
+  
+  .ticket-body {
+    position: relative;
+    padding: 20px;
+    z-index: 1;
+  }
+  
+  .ticket-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .perk {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.875rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .perk:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  .text-gray-400 {
+    color: #bbbbbb;
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    padding: 20px;
+  }
+  
+  input::placeholder {
+    color: #777777;
+  }
+  
+  /* Efectos 3D adicionales */
+  .ticket-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+  
+  .ticket::before,
+  .ticket::after {
+    transition: all 0.3s ease;
+  }
+  
+  .ticket:hover::before {
+    box-shadow: 
+      370px 0 0 #121212,
+      370px 0 0 15px rgba(255, 255, 255, 0.1);
+  }

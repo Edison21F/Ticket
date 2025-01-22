@@ -10,7 +10,7 @@ body {
 }
 /* Background estilo carta para el contenedor principal */
 .main-content {
-    width: 80%;
+    width: 100%;
     max-width: 1200px;
     padding: 20px;
     margin-top: 0;
@@ -21,7 +21,7 @@ body {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.2); /* Sombra para el efecto de carta */
     border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
     z-index: 1;
-    margin-left: 230px;
+    
 }
 
 /* Añadimos un pseudo-elemento para darle más profundidad */

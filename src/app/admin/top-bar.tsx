@@ -69,12 +69,9 @@ export function TopBar() {
                 </div>
                 <div className="h-px bg-[#2A2B3C]" />
                 <div className="py-1">
-                  <button
-                    className="w-full px-4 py-2 text-sm text-left text-red-500 hover:bg-[#2A2B3C] transition-colors"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
+                  <a href="/auth" className="w-full px-4 py-2 text-sm text-left text-red-500 hover:bg-[#2A2B3C] transition-colors">
                     Cerrar Sesión
-                  </button>
+                  </a>
                 </div>
               </div>
             )}

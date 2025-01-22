@@ -27,26 +27,13 @@ const navigationItems = [
   {
     label: 'Tickets',
     items: [
-      { label: 'Listado de Tickets', icon: 'pi pi-fw pi-ticket', routerLink: ['/tickets'] },
-      { label: 'Crear Ticket', icon: 'pi pi-fw pi-plus', routerLink: ['/tickets/create'] }
+      { label: 'Listado de Tickets', icon: 'pi pi-fw pi-ticket', routerLink: ['/admin/tickets'] },
     ]
   },
   {
     label: 'Pagos y Transacciones',
     items: [
-      { label: 'Gestión de Pagos', icon: 'pi pi-fw pi-wallet', routerLink: ['/payments'] }
-    ]
-  },
-  {
-    label: 'Reportes y Analíticas',
-    items: [
-      { label: 'Reportes', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reports'] }
-    ]
-  },
-  {
-    label: 'Centro de Soporte',
-    items: [
-      { label: 'Soporte', icon: 'pi pi-fw pi-support', routerLink: ['/support'] }
+      { label: 'Gestión de Pagos', icon: 'pi pi-fw pi-wallet', routerLink: ['/admin/pagos'] }
     ]
   },
   {

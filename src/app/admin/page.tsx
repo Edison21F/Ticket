@@ -9,13 +9,13 @@ const Dashboard: React.FC = () => {
     <div className="dashboard-card card-1 group">
         <h3>Número de Usuarios</h3>
         <p>1,291,922</p>
-        <a href="#" className="view-detail">View Detail ▶</a>
+        <a href="/admin/usuarios" className="view-detail">View Detail ▶</a>
         <img className="icon-hover" src="https://cdn-icons-png.flaticon.com/512/5828/5828807.png" alt="Icono 1" />
     </div>
     <div className="dashboard-card card-2 group">
         <h3>Eventos Creados</h3>
         <p>3,291,922</p>
-        <a href="#" className="view-detail">View Detail ▶</a>
+        <a href="/admin/eventos" className="view-detail">View Detail ▶</a>
         <img className="icon-hover" src="https://cdn-icons-png.freepik.com/512/10386/10386037.png" alt="Icono 2" />
     </div>
     <div className="dashboard-card card-3 group">
