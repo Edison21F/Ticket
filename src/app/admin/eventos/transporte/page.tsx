@@ -1,146 +1,278 @@
-'use client'
+"use client"
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { useState } from "react"
+import { Plus, Edit, Trash2, ChevronDown } from "lucide-react"
 
-interface TransportSeat {
-  id: string;
-  section: string;
-  row: string;
-  number: number;
-  status: string;
-  price: number;
+interface Route {
+  id: string
+  name: string
+  type: string
+  city: string
+  startPoint: string
+  endPoint: string
+  schedule: string
+  capacity: number
 }
 
-interface TransportSection {
-  id: string;
-  name: string;
-  rows: number;
-}
+export default function TransportePage() {
+  const [routes, setRoutes] = useState<Route[]>([
+    {
+      id: "1",
+      name: "Ruta Express Centro-Norte",
+      type: "Bus",
+      city: "Quito",
+      startPoint: "Terminal Quitumbe",
+      endPoint: "Terminal Norte",
+      schedule: "6:00 AM - 10:00 PM",
+      capacity: 40,
+    },
+    {
+      id: "2",
+      name: "Metro Línea 1",
+      type: "Metro",
+      city: "Quito",
+      startPoint: "Quitumbe",
+      endPoint: "El Labrador",
+      schedule: "5:00 AM - 11:00 PM",
+      capacity: 200,
+    },
+  ])
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedCity, setSelectedCity] = useState<string | null>(null)
 
-const TransportPage: React.FC = () => {
-  const [selectedSeat, setSelectedSeat] = useState<TransportSeat | null>(null);
-  const [seats, setSeats] = useState<TransportSeat[]>([
-    { id: "1", section: "economy", row: "1", number: 1, status: "available", price: 50 },
-    { id: "2", section: "economy", row: "1", number: 2, status: "reserved", price: 50 },
-    { id: "3", section: "business", row: "1", number: 1, status: "available", price: 150 },
-    // Agrega más asientos según sea necesario
-  ]);
+  const cities = ["Quito", "Guayaquil", "Cuenca","New York"]
+  const transportTypes = ["Bus", "Metro", "Avión", "Tren"]
 
-  const sections: TransportSection[] = [
-    { id: "economy", name: "Economy Class", rows: 10 },
-    { id: "business", name: "Business Class", rows: 5 },
-  ];
+  const handleAddRoute = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const newRoute: Route = {
+      id: Date.now().toString(),
+      name: formData.get("name") as string,
+      type: formData.get("type") as string,
+      city: formData.get("city") as string,
+      startPoint: formData.get("startPoint") as string,
+      endPoint: formData.get("endPoint") as string,
+      schedule: formData.get("schedule") as string,
+      capacity: Number.parseInt(formData.get("capacity") as string),
+    }
+    setRoutes([...routes, newRoute])
+    setIsDialogOpen(false)
+  }
 
-  const handleSeatUpdate = (seatId: string, status: string) => {
-    setSeats((prevSeats) =>
-      prevSeats.map((seat) =>
-        seat.id === seatId ? { ...seat, status } : seat
-      )
-    );
-  };
-
-  const handleSeatDelete = (seatId: string) => {
-    setSeats((prevSeats) => prevSeats.filter((seat) => seat.id !== seatId));
-  };
-
-  const getSectionSeats = (sectionId: string) => {
-    return seats.filter((seat) => seat.section === sectionId);
-  };
-
-  const renderSeatGroup = (sectionSeats: TransportSeat[], rowNum: string) => {
-    const rowSeats = sectionSeats.filter((seat) => seat.row === rowNum);
-    const leftSeats = rowSeats.slice(0, 3);
-    const rightSeats = rowSeats.slice(3);
-
-    return (
-      <div className="flex justify-between w-full">
-        <div className="flex gap-2">{leftSeats.map((seat) => renderSeat(seat))}</div>
-        <div className="flex gap-2">{rightSeats.map((seat) => renderSeat(seat))}</div>
-      </div>
-    );
-  };
-
-  const renderSeat = (seat: TransportSeat) => (
-    <div key={seat.id} className="relative">
-      <motion.button
-        className={`w-10 h-10 rounded-md flex items-center justify-center ${
-          seat.status === "available"
-            ? "bg-green-500 hover:bg-green-400"
-            : seat.status === "reserved"
-            ? "bg-gray-500"
-            : "bg-red-500"
-        }`}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setSelectedSeat(seat)}
-      >
-        {seat.row}
-        {seat.number}
-      </motion.button>
-      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center gap-2 opacity-0 hover:opacity-100">
-        <button
-          className="p-2 bg-blue-500 text-white rounded-md"
-          onClick={() => handleSeatUpdate(seat.id, "available")}
-        >
-          <FaEdit />
-        </button>
-        <button
-          className="p-2 bg-red-500 text-white rounded-md"
-          onClick={() => handleSeatDelete(seat.id)}
-        >
-          <FaTrash />
-        </button>
-      </div>
-    </div>
-  );
+  const handleDeleteRoute = (id: string) => {
+    setRoutes(routes.filter((route) => route.id !== id))
+  }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-center mb-8">Gestión de Transporte</h1>
-      <div className="bg-gray-800 p-8 rounded-lg text-white">
-        {sections.map((section) => (
-          <div key={section.id} className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">{section.name}</h2>
-            {Array.from({ length: section.rows }, (_, i) => (
-              <div key={i} className="flex items-center gap-2 mb-2">
-                <span className="w-6">{i + 1}</span>
-                {renderSeatGroup(getSectionSeats(section.id), (i + 1).toString())}
+    <div className="container mx-auto p-6">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Gestión de Transporte</h1>
+          <p className="text-gray-400">Administra las rutas y medios de transporte</p>
+        </div>
+        <button
+          onClick={() => setIsDialogOpen(true)}
+          className="flex items-center px-4 py-2 bg-[#E59D23] hover:bg-[#c48620] text-white rounded-md transition-colors"
+        >
+          <Plus className="mr-2 h-4 w-4" /> Agregar Ruta
+        </button>
+      </div>
+
+      {/* Modal Dialog */}
+      {isDialogOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#1D1E2C] text-white rounded-lg w-full max-w-2xl p-6">
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold">Agregar Nueva Ruta</h2>
+              <p className="text-gray-400">Ingresa los detalles de la nueva ruta de transporte</p>
+            </div>
+            <form onSubmit={handleAddRoute} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="block text-sm font-medium">
+                    Nombre de la Ruta
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="type" className="block text-sm font-medium">
+                    Tipo de Transporte
+                  </label>
+                  <select
+                    name="type"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  >
+                    <option value="">Seleccionar tipo</option>
+                    {transportTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="city" className="block text-sm font-medium">
+                    Ciudad
+                  </label>
+                  <select
+                    name="city"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  >
+                    <option value="">Seleccionar ciudad</option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="capacity" className="block text-sm font-medium">
+                    Capacidad
+                  </label>
+                  <input
+                    id="capacity"
+                    name="capacity"
+                    type="number"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="startPoint" className="block text-sm font-medium">
+                    Punto de Inicio
+                  </label>
+                  <input
+                    id="startPoint"
+                    name="startPoint"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="endPoint" className="block text-sm font-medium">
+                    Punto Final
+                  </label>
+                  <input
+                    id="endPoint"
+                    name="endPoint"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="schedule" className="block text-sm font-medium">
+                    Horario
+                  </label>
+                  <input
+                    id="schedule"
+                    name="schedule"
+                    required
+                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
+                  />
+                </div>
               </div>
-            ))}
+              <div className="flex gap-2 justify-end mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#E59D23] hover:bg-[#c48620] text-white rounded-md transition-colors"
+                >
+                  Guardar Ruta
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Accordion */}
+      <div className="space-y-4">
+        {cities.map((city) => (
+          <div key={city} className="bg-[#2A2B3C] rounded-lg border border-[#3A3B4C]">
+            <button
+              onClick={() => setSelectedCity(selectedCity === city ? null : city)}
+              className="w-full px-4 py-3 flex items-center justify-between hover:text-[#E59D23] transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-medium">Rutas en {city}</span>
+                <span className="text-sm text-gray-400">
+                  ({routes.filter((route) => route.city === city).length} rutas)
+                </span>
+              </div>
+              <ChevronDown
+                className={`h-5 w-5 transition-transform ${
+                  selectedCity === city ? "transform rotate-180" : ""
+                }`}
+              />
+            </button>
+            
+            {selectedCity === city && (
+              <div className="px-4 py-3 border-t border-[#3A3B4C]">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {routes
+                    .filter((route) => route.city === city)
+                    .map((route) => (
+                      <div key={route.id} className="bg-[#1D1E2C] border border-[#3A3B4C] rounded-lg p-4">
+                        <div className="flex items-center justify-between pb-2">
+                          <h3 className="text-md font-medium">{route.name}</h3>
+                          <div className="flex gap-2">
+                            <button className="text-gray-400 hover:text-[#E59D23] p-1">
+                              <Edit className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteRoute(route.id)}
+                              className="text-gray-400 hover:text-red-500 p-1"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="grid gap-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-400">Tipo:</span>
+                            <span className="text-sm">{route.type}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-400">Capacidad:</span>
+                            <span className="text-sm">{route.capacity} pasajeros</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-400">Horario:</span>
+                            <span className="text-sm">{route.schedule}</span>
+                          </div>
+                          <div className="mt-2 pt-2 border-t border-[#3A3B4C]">
+                            <div className="flex items-center gap-2 text-sm">
+                              <span className="text-gray-400">Ruta:</span>
+                              <span>{route.startPoint}</span>
+                              <ChevronDown className="h-3 w-3 rotate-[-90deg]" />
+                              <span>{route.endPoint}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
-      {selectedSeat && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-black p-4 rounded-lg shadow-lg"
-        >
-          <p>Asiento seleccionado: Fila {selectedSeat.row}, Asiento {selectedSeat.number}</p>
-          <p>Precio: ${selectedSeat.price}</p>
-          <div className="mt-4 flex gap-2">
-            <button
-              className="bg-gray-500 text-white py-2 px-4 rounded-md"
-              onClick={() => setSelectedSeat(null)}
-            >
-              Cancelar
-            </button>
-            <button
-              className="bg-green-500 text-white py-2 px-4 rounded-md"
-              onClick={() => {
-                console.log("Reservando asiento:", selectedSeat);
-                setSelectedSeat(null);
-              }}
-            >
-              Reservar
-            </button>
-          </div>
-        </motion.div>
-      )}
     </div>
-  );
-};
-
-export default TransportPage;
+  )
+}
