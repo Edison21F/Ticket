@@ -34,7 +34,7 @@ const navigationItems = [
   {
     label: 'Pagos y Transacciones',
     items: [
-      { label: 'Gestión de Pagos', icon: 'pi pi-fw pi-wallet', routerLink: ['/payments'] }
+      { label: 'Gestión de Pagos', icon: 'pi pi-fw pi-wallet', routerLink: ['/admin/payments'] }
     ]
   },
   {
