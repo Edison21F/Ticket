@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import "./ModernTicketListing.css";
-import { Search, Plane, Music, Film, Bus, Calendar, Clock, MapPin, User, Ticket } from "lucide-react";
+import { Search, Music, Film, Bus, Calendar, Clock, MapPin, User, Ticket } from "lucide-react";
 
 const ModernTicketListing = () => {
   const [searchTerm, setSearchTerm] = useState("");

@@ -1,8 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, Film, Music, Bus, Star, Users, MapPin, Clock, PlusCircle } from 'lucide-react';
+import { Calendar, Film, Music, Bus, Star, Users, MapPin, Clock } from 'lucide-react';
 
 interface EventCardProps {
   image: string;

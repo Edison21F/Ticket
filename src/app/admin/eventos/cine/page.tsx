@@ -154,7 +154,7 @@ export default function CinemaAdminPage() {
               <div key={row} className="flex justify-center mb-2">
                 {seats
                   .filter((seat) => seat.row === row)
-                  .map((seat, index) => {
+                  .map((seat) => {
                     const isAisle = (seat.number === Math.ceil(seatsPerRow[rowIndex] / 2))
                     return (
                       <React.Fragment key={seat.id}>

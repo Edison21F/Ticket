@@ -6,16 +6,11 @@ import {
   Plus,
   Edit2,
   Trash2,
-  ChevronRight,
   Search,
   UserPlus,
-  CheckCircle,
-  XCircle,
-  Settings,
   Ticket,
   CreditCard,
-  Calendar,
-  Eye
+  Calendar
 } from 'lucide-react';
 
 interface Role {
@@ -64,7 +59,7 @@ const RoleCard: React.FC<RoleCardProps> = ({ role, isActive, onClick }) => (
   </div>
 );
 
-const PermissionGroup: React.FC<PermissionGroupProps> = ({ title, icon: Icon, permissions, selectedPermissions, onToggle }) => (
+const PermissionGroup: React.FC<PermissionGroupProps> = ({ title, permissions, selectedPermissions, onToggle }) => (
   <div className="bg-gray-800 rounded-lg p-4 mb-4 transition-transform transform hover:scale-105">
     <div className="flex items-center gap-2 mb-4">
       <i className="w-5 h-5 text-gray-400" />

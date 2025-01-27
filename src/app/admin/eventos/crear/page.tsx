@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, ChangeEvent } from "react"
-import { Music2, Film, Plane, Upload, Plus, Minus, Calendar, X } from "lucide-react"
+import { Music2, Film, Plane, Upload, Plus, Minus, X } from "lucide-react"
 
 interface TicketType {
     name: string
