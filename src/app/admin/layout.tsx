@@ -1,5 +1,6 @@
 import { SideNav } from "./side-nav"
 import { TopBar } from "./top-bar"
+import {Toaster} from 'sonner'
 const navigationItems = [
   {
     label: 'Inicio',
@@ -37,9 +38,9 @@ const navigationItems = [
     ]
   },
   {
-    label: 'Configuración',
+    label: 'Sesión',
     items: [
-      { label: 'Ajustes', icon: 'pi pi-fw pi-cog', routerLink: ['/settings'] }
+      { label: 'Cerrar sesión', icon: 'pi pi-fw pi-cog', routerLink: ['/auth'] }
     ]
   }
 ];
@@ -52,6 +53,7 @@ export default function RootLayout({
   return (
       <div className="bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900  ">
         <div  className="flex min-h-screen">
+        <Toaster position="top-right" />
           <SideNav items={navigationItems} />
           
           <div className="flex-1">

@@ -247,7 +247,7 @@ export default function TransportePage() {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-5">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -307,7 +307,7 @@ export default function TransportePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-[#2A2B3C] rounded-lg border border-[#3A3B4C]"
+                className="flex-1 border border-[#3A3B4C]"
               >
                 <motion.button
                   onClick={() => setSelectedCity(selectedCity === city ? null : city)}
