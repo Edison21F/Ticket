@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={`container ${isSignUp ? 'active' : ''}`} id="container">
+    <div className={`container ${isSignUp ? 'active' : ''}`} id="container  bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900">
       <div className="form-container sign-up">
         <form>
           <h1>Crea tu cuenta</h1>

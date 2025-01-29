@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 export default function DashboardPage() {
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900">
+    <div>
 
       {/* Main Content */}
       <div className="flex-1">

@@ -150,8 +150,8 @@ const RolesManager: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen  p-8">
+      <div className="flex-1">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Gestión de Roles y Permisos</h1>

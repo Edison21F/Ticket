@@ -1,18 +1,206 @@
-"use client"
-
-import { useState } from "react"
-import { Plus, Edit, Trash2, ChevronDown } from "lucide-react"
+'use client';
+import React, { useState} from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Edit, Trash2, ChevronDown, MapPin, Clock, Users, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Route {
-  id: string
-  name: string
-  type: string
-  city: string
-  startPoint: string
-  endPoint: string
-  schedule: string
-  capacity: number
+  id: string;
+  name: string;
+  type: string;
+  city: string;
+  startPoint: string;
+  endPoint: string;
+  schedule: string;
+  capacity: number;
 }
+
+const RouteCard: React.FC<{
+  route: Route;
+  onDelete: (id: string) => void;
+  onEdit: (route: Route) => void;
+}> = ({ route, onDelete, onEdit }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
+    whileHover={{ scale: 1.02 }}
+    className="bg-[#1D1E2C] border border-[#3A3B4C] rounded-lg p-4 hover:shadow-lg transition-all"
+  >
+    <div className="flex items-center justify-between pb-3">
+      <h3 className="text-lg font-medium text-white">{route.name}</h3>
+      <div className="flex gap-2">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          onClick={() => onEdit(route)}
+          className="text-gray-400 hover:text-[#E59D23] p-1"
+        >
+          <Edit className="h-4 w-4" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          onClick={() => onDelete(route.id)}
+          className="text-gray-400 hover:text-red-500 p-1"
+        >
+          <Trash2 className="h-4 w-4" />
+        </motion.button>
+      </div>
+    </div>
+    
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <div className="bg-[#E59D23]/10 text-[#E59D23] px-2 py-1 rounded text-sm">
+          {route.type}
+        </div>
+        <div className="bg-blue-500/10 text-blue-400 px-2 py-1 rounded text-sm">
+          {route.capacity} pasajeros
+        </div>
+      </div>
+      
+      <div className="grid gap-2 text-sm">
+        <div className="flex items-center gap-2 text-gray-400">
+          <Clock className="h-4 w-4" />
+          <span>{route.schedule}</span>
+        </div>
+        <div className="flex items-center gap-2 text-gray-400">
+          <MapPin className="h-4 w-4" />
+          <div className="flex items-center gap-2">
+            <span className="text-white">{route.startPoint}</span>
+            <ChevronDown className="h-3 w-3 rotate-[-90deg]" />
+            <span className="text-white">{route.endPoint}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const RouteForm: React.FC<{
+  onSubmit: (route: Route) => void;
+  initialData?: Route;
+  onCancel: () => void;
+}> = ({ onSubmit, initialData, onCancel }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const routeData: Route = {
+      id: initialData?.id || Date.now().toString(),
+      name: formData.get("name") as string,
+      type: formData.get("type") as string,
+      city: formData.get("city") as string,
+      startPoint: formData.get("startPoint") as string,
+      endPoint: formData.get("endPoint") as string,
+      schedule: formData.get("schedule") as string,
+      capacity: Number(formData.get("capacity")),
+    };
+    onSubmit(routeData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Nombre de la Ruta</label>
+          <Input
+            name="name"
+            defaultValue={initialData?.name}
+            required
+            className="bg-[#2A2B3C] border-[#3A3B4C]"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Tipo de Transporte</label>
+          <Select name="type" defaultValue={initialData?.type}>
+            <SelectTrigger className="bg-[#2A2B3C] border-[#3A3B4C]">
+              <SelectValue placeholder="Seleccionar tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              {["Bus", "Metro", "Avión", "Tren"].map((type) => (
+                <SelectItem key={type} value={type}>{type}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Ciudad</label>
+          <Select name="city" defaultValue={initialData?.city}>
+            <SelectTrigger className="bg-[#2A2B3C] border-[#3A3B4C]">
+              <SelectValue placeholder="Seleccionar ciudad" />
+            </SelectTrigger>
+            <SelectContent>
+              {["Quito", "Guayaquil", "Cuenca", "New York"].map((city) => (
+                <SelectItem key={city} value={city}>{city}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Capacidad</label>
+          <Input
+            name="capacity"
+            type="number"
+            defaultValue={initialData?.capacity}
+            required
+            className="bg-[#2A2B3C] border-[#3A3B4C]"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Punto de Inicio</label>
+          <Input
+            name="startPoint"
+            defaultValue={initialData?.startPoint}
+            required
+            className="bg-[#2A2B3C] border-[#3A3B4C]"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Punto Final</label>
+          <Input
+            name="endPoint"
+            defaultValue={initialData?.endPoint}
+            required
+            className="bg-[#2A2B3C] border-[#3A3B4C]"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-200">Horario</label>
+          <Input
+            name="schedule"
+            defaultValue={initialData?.schedule}
+            required
+            className="bg-[#2A2B3C] border-[#3A3B4C]"
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={onCancel}
+          className="text-gray-400 hover:text-white"
+        >
+          Cancelar
+        </Button>
+        <Button
+          type="submit"
+          className="bg-[#E59D23] hover:bg-[#c48620] text-white"
+        >
+          {initialData ? 'Actualizar Ruta' : 'Crear Ruta'}
+        </Button>
+      </div>
+    </form>
+  );
+};
 
 export default function TransportePage() {
   const [routes, setRoutes] = useState<Route[]>([
@@ -36,243 +224,141 @@ export default function TransportePage() {
       schedule: "5:00 AM - 11:00 PM",
       capacity: 200,
     },
-  ])
-  
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedCity, setSelectedCity] = useState<string | null>(null)
+  ]);
 
-  const cities = ["Quito", "Guayaquil", "Cuenca","New York"]
-  const transportTypes = ["Bus", "Metro", "Avión", "Tren"]
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [editingRoute, setEditingRoute] = useState<Route | null>(null);
 
-  const handleAddRoute = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const newRoute: Route = {
-      id: Date.now().toString(),
-      name: formData.get("name") as string,
-      type: formData.get("type") as string,
-      city: formData.get("city") as string,
-      startPoint: formData.get("startPoint") as string,
-      endPoint: formData.get("endPoint") as string,
-      schedule: formData.get("schedule") as string,
-      capacity: Number.parseInt(formData.get("capacity") as string),
-    }
-    setRoutes([...routes, newRoute])
-    setIsDialogOpen(false)
-  }
+  const handleAddRoute = (newRoute: Route) => {
+    setRoutes([...routes, newRoute]);
+    setIsDialogOpen(false);
+  };
+
+  const handleEditRoute = (updatedRoute: Route) => {
+    setRoutes(routes.map(route => 
+      route.id === updatedRoute.id ? updatedRoute : route
+    ));
+    setEditingRoute(null);
+  };
 
   const handleDeleteRoute = (id: string) => {
-    setRoutes(routes.filter((route) => route.id !== id))
-  }
+    setRoutes(routes.filter((route) => route.id !== id));
+  };
 
   return (
     <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex justify-between items-center mb-8"
+      >
         <div>
-          <h1 className="text-2xl font-bold text-white">Gestión de Transporte</h1>
-          <p className="text-gray-400">Administra las rutas y medios de transporte</p>
+          <h1 className="text-3xl font-bold text-white">Gestión de Transporte</h1>
+          <p className="text-gray-400 mt-1">Administra las rutas y medios de transporte</p>
         </div>
-        <button
+        <Button
           onClick={() => setIsDialogOpen(true)}
-          className="flex items-center px-4 py-2 bg-[#E59D23] hover:bg-[#c48620] text-white rounded-md transition-colors"
+          className="bg-[#E59D23] hover:bg-[#c48620] text-white"
         >
           <Plus className="mr-2 h-4 w-4" /> Agregar Ruta
-        </button>
-      </div>
+        </Button>
+      </motion.div>
 
-      {/* Modal Dialog */}
-      {isDialogOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#1D1E2C] text-white rounded-lg w-full max-w-2xl p-6">
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold">Agregar Nueva Ruta</h2>
-              <p className="text-gray-400">Ingresa los detalles de la nueva ruta de transporte</p>
-            </div>
-            <form onSubmit={handleAddRoute} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium">
-                    Nombre de la Ruta
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="type" className="block text-sm font-medium">
-                    Tipo de Transporte
-                  </label>
-                  <select
-                    name="type"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  >
-                    <option value="">Seleccionar tipo</option>
-                    {transportTypes.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="city" className="block text-sm font-medium">
-                    Ciudad
-                  </label>
-                  <select
-                    name="city"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  >
-                    <option value="">Seleccionar ciudad</option>
-                    {cities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="capacity" className="block text-sm font-medium">
-                    Capacidad
-                  </label>
-                  <input
-                    id="capacity"
-                    name="capacity"
-                    type="number"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="startPoint" className="block text-sm font-medium">
-                    Punto de Inicio
-                  </label>
-                  <input
-                    id="startPoint"
-                    name="startPoint"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="endPoint" className="block text-sm font-medium">
-                    Punto Final
-                  </label>
-                  <input
-                    id="endPoint"
-                    name="endPoint"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="schedule" className="block text-sm font-medium">
-                    Horario
-                  </label>
-                  <input
-                    id="schedule"
-                    name="schedule"
-                    required
-                    className="w-full px-3 py-2 bg-[#2A2B3C] border border-[#3A3B4C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#E59D23]"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2 justify-end mt-6">
-                <button
-                  type="button"
-                  onClick={() => setIsDialogOpen(false)}
-                  className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#E59D23] hover:bg-[#c48620] text-white rounded-md transition-colors"
-                >
-                  Guardar Ruta
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="bg-[#1D1E2C] text-white border-[#3A3B4C]">
+          <DialogHeader>
+            <DialogTitle>Agregar Nueva Ruta</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Ingresa los detalles de la nueva ruta de transporte
+            </DialogDescription>
+          </DialogHeader>
+          <RouteForm onSubmit={handleAddRoute} onCancel={() => setIsDialogOpen(false)} />
+        </DialogContent>
+      </Dialog>
 
-      {/* Accordion */}
+      <Dialog open={!!editingRoute} onOpenChange={() => setEditingRoute(null)}>
+        <DialogContent className="bg-[#1D1E2C] text-white border-[#3A3B4C]">
+          <DialogHeader>
+            <DialogTitle>Editar Ruta</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Modifica los detalles de la ruta
+            </DialogDescription>
+          </DialogHeader>
+          {editingRoute && (
+            <RouteForm
+              initialData={editingRoute}
+              onSubmit={handleEditRoute}
+              onCancel={() => setEditingRoute(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
       <div className="space-y-4">
-        {cities.map((city) => (
-          <div key={city} className="bg-[#2A2B3C] rounded-lg border border-[#3A3B4C]">
-            <button
-              onClick={() => setSelectedCity(selectedCity === city ? null : city)}
-              className="w-full px-4 py-3 flex items-center justify-between hover:text-[#E59D23] transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-medium">Rutas en {city}</span>
-                <span className="text-sm text-gray-400">
-                  ({routes.filter((route) => route.city === city).length} rutas)
-                </span>
-              </div>
-              <ChevronDown
-                className={`h-5 w-5 transition-transform ${
-                  selectedCity === city ? "transform rotate-180" : ""
-                }`}
-              />
-            </button>
-            
-            {selectedCity === city && (
-              <div className="px-4 py-3 border-t border-[#3A3B4C]">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {routes
-                    .filter((route) => route.city === city)
-                    .map((route) => (
-                      <div key={route.id} className="bg-[#1D1E2C] border border-[#3A3B4C] rounded-lg p-4">
-                        <div className="flex items-center justify-between pb-2">
-                          <h3 className="text-md font-medium">{route.name}</h3>
-                          <div className="flex gap-2">
-                            <button className="text-gray-400 hover:text-[#E59D23] p-1">
-                              <Edit className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteRoute(route.id)}
-                              className="text-gray-400 hover:text-red-500 p-1"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </div>
-                        <div className="grid gap-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-400">Tipo:</span>
-                            <span className="text-sm">{route.type}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-400">Capacidad:</span>
-                            <span className="text-sm">{route.capacity} pasajeros</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-400">Horario:</span>
-                            <span className="text-sm">{route.schedule}</span>
-                          </div>
-                          <div className="mt-2 pt-2 border-t border-[#3A3B4C]">
-                            <div className="flex items-center gap-2 text-sm">
-                              <span className="text-gray-400">Ruta:</span>
-                              <span>{route.startPoint}</span>
-                              <ChevronDown className="h-3 w-3 rotate-[-90deg]" />
-                              <span>{route.endPoint}</span>
-                            </div>
-                          </div>
+        <AnimatePresence>
+          {["Quito", "Guayaquil", "Cuenca", "New York"].map((city) => {
+            const cityRoutes = routes.filter((route) => route.city === city);
+            if (cityRoutes.length === 0) return null;
+
+            return (
+              <motion.div
+                key={city}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="bg-[#2A2B3C] rounded-lg border border-[#3A3B4C]"
+              >
+                <motion.button
+                  onClick={() => setSelectedCity(selectedCity === city ? null : city)}
+                  className="w-full px-6 py-4 flex items-center justify-between hover:text-[#E59D23] transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-5 w-5" />
+                    <span className="text-lg font-medium ">Rutas en {city}</span>
+                    <span className="text-sm text-gray-400">
+                      ({cityRoutes.length} {cityRoutes.length === 1 ? 'ruta' : 'rutas'})
+                    </span>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: selectedCity === city ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown className="h-5 w-5" />
+                  </motion.div>
+                </motion.button>
+
+                <AnimatePresence>
+                  {selectedCity === city && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 py-4 border-t border-[#3A3B4C]">
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                          <AnimatePresence>
+                            {cityRoutes.map((route) => (
+                              <RouteCard
+                                key={route.id}
+                                route={route}
+                                onDelete={handleDeleteRoute}
+                                onEdit={setEditingRoute}
+                              />
+                            ))}
+                          </AnimatePresence>
                         </div>
                       </div>
-                    ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </div>
-  )
+  );
 }

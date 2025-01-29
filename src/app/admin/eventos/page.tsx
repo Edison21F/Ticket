@@ -1,7 +1,10 @@
 'use client';
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Film, Music, Bus, Star, Users, MapPin, Clock } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Film, Music, Bus, Star, Users, MapPin, Clock, Search, Plus } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface EventCardProps {
   image: string;
@@ -10,116 +13,174 @@ interface EventCardProps {
   link: string;
 }
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 }
+};
 
 const EventCard: React.FC<EventCardProps> = ({ image, name, revenue, link }) => (
-  
   <motion.div
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="group bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow w-65"
+    variants={fadeInUp}
+    whileHover={{ scale: 1.03, y: -5 }}
+    whileTap={{ scale: 0.98 }}
+    className="group relative bg-gray-800/90 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
   >
-    <div className="relative h-40">
-      <img
+    <div className="relative h-48 overflow-hidden">
+      <motion.img
         src={image}
         alt={name}
-        className="absolute inset-0 w-full h-full object-cover group-hover:scale-120 transition-transform duration-500"
-      />
-    </div>
-    <div className="p-4">
-      <h3 className="text-xl font-semibold text-white mb-2">{name}</h3>
-      <p className="text-gray-400 mb-4">Total recaudado: {revenue}</p>
-      <motion.a
+        className="absolute inset-0 w-full h-full object-cover"
         whileHover={{ scale: 1.1 }}
+        transition={{ duration: 0.6 }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/20 to-transparent" />
+    </div>
+    <div className="p-5">
+      <h3 className="text-xl font-bold text-white mb-2">{name}</h3>
+      <p className="text-gray-300 mb-4">
+        <span className="text-blue-400 font-semibold">Total recaudado:</span> {revenue}
+      </p>
+      <motion.a
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         href={link}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold w-full block text-center transition-all"
+        className="inline-flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors duration-200"
       >
-        Administrar
+        <span>Administrar</span>
+        <Clock className="w-4 h-4 ml-2" />
       </motion.a>
     </div>
   </motion.div>
 );
 
+const FeaturedEvent: React.FC = () => {
+  const badgeVariants = {
+    initial: { opacity: 0, x: -20 },
+    animate: { opacity: 1, x: 0 },
+    hover: { scale: 1.05 }
+  };
 
-const FeaturedEvent: React.FC = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8 }}
-    className="relative h-[500px] rounded-2xl overflow-hidden mb-16"
-  >
-    <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/90 to-transparent" />
-    <img
-      src="/img/spiderman.jpeg"
-      alt="Featured event"
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-    <div className="relative h-full flex flex-col justify-end p-8 md:p-12 max-w-3xl">
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="relative h-[600px] rounded-2xl overflow-hidden mb-16"
+    >
       <motion.div
-        className="flex items-center gap-2 mb-4"
+        className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/90 to-transparent"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
-        <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-        <span className="text-yellow-400 font-semibold">Evento Destacado</span>
-      </motion.div>
-      <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-        Spiderman 3
-        <br /> No Way Home
-      </h2>
-      <p className="text-gray-300 text-lg mb-6 max-w-2xl">
-        El evento más vendido en el año
-      </p>
-      <motion.div
-        className="flex flex-wrap gap-4 mb-8"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.8 }}
-      >
-        <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-          <Calendar className="w-4 h-4 text-white" />
-          <span className="text-white text-sm">15 Marzo 2025</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-          <MapPin className="w-4 h-4 text-white" />
-          <span className="text-white text-sm">Multicines</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-          <Users className="w-4 h-4 text-white" />
-          <span className="text-white text-sm">60,000 asistentes</span>
-        </div>
-      </motion.div>
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        className="bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2 w-fit"
-      >
-        Administrar
-        <Clock className="w-4 h-4" />
-      </motion.button>
-    </div>
+        transition={{ duration: 1 }}
+      />
+      <motion.img
+        src="/img/spiderman.jpeg"
+        alt="Featured event"
+        className="absolute inset-0 w-full h-full object-cover"
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.5 }}
+      />
+      <div className="relative h-full flex flex-col justify-end p-12 max-w-4xl">
+        <motion.div
+          className="flex items-center gap-2 mb-4"
+          variants={badgeVariants}
+          initial="initial"
+          animate="animate"
+          whileHover="hover"
+        >
+          <Star className="w-6 h-6 text-yellow-400 fill-yellow-400" />
+          <span className="text-yellow-400 font-bold text-lg">Evento Destacado</span>
+        </motion.div>
+        <motion.h2
+          className="text-6xl font-bold text-white mb-6"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          Spiderman 3
+          <br />
+          <span className="text-blue-400">No Way Home</span>
+        </motion.h2>
+        <motion.p
+          className="text-gray-200 text-xl mb-8 max-w-2xl"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          El evento más vendido en el año con récord de asistencia
+        </motion.p>
+        <motion.div
+          className="flex flex-wrap gap-4 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          {[
+            { icon: Calendar, text: "15 Marzo 2025" },
+            { icon: MapPin, text: "Multicines" },
+            { icon: Users, text: "60,000 asistentes" }
+          ].map((item, index) => (
+            <motion.div
+              key={index}
+              className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-5 py-2.5 rounded-full"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.2)" }}
+            >
+              <item.icon className="w-5 h-5 text-blue-400" />
+              <span className="text-white text-sm font-medium">{item.text}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+        <motion.button
+          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold inline-flex items-center gap-3 w-fit transition-colors duration-200"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Administrar Evento
+          <Clock className="w-5 h-5" />
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+};
+
+const ServiceCard: React.FC<{ icon: React.ElementType; title: string; description: string }> = ({ icon: Icon, title, description }) => (
+  <motion.div
+    whileHover={{ y: -10, scale: 1.02 }}
+    className="p-8 bg-gray-800/80 rounded-xl backdrop-blur-sm"
+  >
+    <Icon className="w-10 h-10 text-blue-400 mb-4" />
+    <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+    <p className="text-gray-300">{description}</p>
   </motion.div>
 );
 
 const Eventos: React.FC = () => {
   const [newEvent, setNewEvent] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const renderCarousel = (title: string, events: EventCardProps[]) => (
+  const renderCarousel = useCallback((title: string, events: EventCardProps[]) => (
     <motion.div
-      initial={{ opacity: 0, x: -100 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="mb-12"
+      className="mb-16"
     >
-      <h2 className="text-3xl font-bold text-white mb-6">{title}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {events.map((event, index) => (
-          <EventCard key={index} {...event} />
-        ))}
+      <h2 className="text-3xl font-bold text-white mb-8">{title}</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <AnimatePresence>
+          {events
+            .filter(event => event.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            .map((event, index) => (
+              <EventCard key={index} {...event} />
+            ))}
+        </AnimatePresence>
       </div>
     </motion.div>
-  );
+  ), [searchTerm]);
 
+  // Your existing event data...
   const cineEvents = [
     { image: '/img/thor.jpeg', name: 'Thor: Love and Thunder', revenue: '$120,000', link: '/admin/eventos/cine' },
     { image: '/img/doctor-strange.png', name: 'Doctor Strange in the Multiverse of Madness', revenue: '$100,000', link: '/admin/eventos/cine' },
@@ -142,60 +203,90 @@ const Eventos: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen p-8 ">
+      <div className="flex-1">
         <FeaturedEvent />
 
-        {/* Crear un nuevo evento */}
+        {/* Search and Create Event Section */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-16"
+          className="mb-16 space-y-8"
         >
-          <h2 className="text-2xl font-semibold text-white mb-4">¿Quieres agregar un nuevo evento?</h2>
-          <div className="flex items-center gap-4">
-            <input
-              type="text"
-              placeholder="Escribe el nombre del evento..."
-              value={newEvent}
-              onChange={(e) => setNewEvent(e.target.value)}
-              className="flex-1 px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <a href="/admin/eventos/crear" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-white font-semibold transition-all">Agregar</a>
+          <div className="flex flex-col md:flex-row gap-6 items-stretch">
+            <Card className="flex-1 bg-gray-800/50 border-gray-700">
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-bold text-white mb-4">Buscar Eventos</h2>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Input
+                    type="text"
+                    placeholder="Buscar eventos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="flex-1 bg-gray-800/50 border-gray-700">
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-bold text-white mb-4">Nuevo Evento</h2>
+                <div className="flex gap-4">
+                  <Input
+                    type="text"
+                    placeholder="Nombre del evento..."
+                    value={newEvent}
+                    onChange={(e) => setNewEvent(e.target.value)}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
+                  />
+                  <Button
+                    asChild
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6"
+                  >
+                    <a href="/admin/eventos/crear">
+                      <Plus className="w-5 h-5 mr-2" />
+                      Crear
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </motion.div>
 
-
-
-
-        {/* Carruseles */}
+        {/* Event Categories */}
         {renderCarousel('Eventos de Cine', cineEvents)}
         {renderCarousel('Conciertos', conciertosEvents)}
         {renderCarousel('Transporte', transporteEvents)}
 
-        {/* Servicios */}
+        {/* Services Section */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-12"
+          className="mb-16"
         >
-          <h2 className="text-3xl font-bold text-white mb-4">Nuestros Servicios</h2>
-          <p className="text-gray-400">Explora nuestra amplia gama de servicios para eventos</p>
-          <div className="flex gap-6 mt-6">
-            <div className="p-6 bg-gray-800 rounded-lg text-white flex-1">
-              <Film className="w-8 h-8 mb-4" />
-              Servicio de Proyección
-            </div>
-            <div className="p-6 bg-gray-800 rounded-lg text-white flex-1">
-              <Music className="w-8 h-8 mb-4" />
-              Equipos de Sonido
-            </div>
-            <div className="p-6 bg-gray-800 rounded-lg text-white flex-1">
-              <Bus className="w-8 h-8 mb-4" />
-              Transporte Especial
-            </div>
+          <h2 className="text-3xl font-bold text-white mb-8">Nuestros Servicios</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <ServiceCard
+              icon={Film}
+              title="Servicio de Proyección"
+              description="Equipos de última generación para la mejor experiencia cinematográfica"
+            />
+            <ServiceCard
+              icon={Music}
+              title="Equipos de Sonido"
+              description="Sistemas de audio profesional para eventos de cualquier escala"
+            />
+            <ServiceCard
+              icon={Bus}
+              title="Transporte Especial"
+              description="Servicios de transporte seguros y puntuales para todos los eventos"
+            />
           </div>
         </motion.div>
       </div>

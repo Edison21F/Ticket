@@ -50,9 +50,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" >
-      <body>
-        <div  className="flex min-h-screen bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900">
+      <div className="bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900  ">
+        <div  className="flex min-h-screen">
           <SideNav items={navigationItems} />
           
           <div className="flex-1">
@@ -61,8 +60,8 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
           </div>
         </div>
-      </body>
-    </html>
+      </div>
+  
   )
 }
 

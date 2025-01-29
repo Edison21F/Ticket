@@ -120,10 +120,10 @@ export default function CinemaAdminPage() {
   const seatsPerRow = [14, 16, 18, 18, 20, 20, 20, 18, 18, 16, 14]
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
+    <div className=" p-6">
       {/* Header */}
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+      <div className="flex-1">
+        <div className="flex justify-between items-center mb-7">
           <h1 className="text-2xl font-bold text-white">Administración de Sala</h1>
           <div className="flex gap-4">
             <div className="flex items-center gap-2">
@@ -151,7 +151,7 @@ export default function CinemaAdminPage() {
         <div className="overflow-x-auto">
           <div className="flex flex-col items-center">
             {rows.map((row, rowIndex) => (
-              <div key={row} className="flex justify-center mb-2">
+              <div key={row} className="flex justify-center mb-3">
                 {seats
                   .filter((seat) => seat.row === row)
                   .map((seat) => {

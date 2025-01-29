@@ -10,10 +10,8 @@ body {
 .container {
     padding: 20px;
     text-align: center;
-    background-color: #111827;
     min-height: 100vh;
     overflow: hidden; /* Evita el desbordamiento fuera de la pantalla */
-    border: 3px solid #141414; /* Borde de 3px de grosor */
     border-radius: 8px; /* Bordes redondeados */
 }
 
@@ -85,7 +83,7 @@ body {
 
 /* Estilos para el título de la tarjeta */
 .cardTitle {
-    background: linear-gradient(90deg, #ff8c00, #ff00ff);
+    background: linear-gradient(90deg, #ff8c00, #500350);
     color: white;
     font-weight: bold;
     font-size: 16px;
@@ -123,10 +121,8 @@ body {
 }
 
 .cardFront {
-    background: linear-gradient(135deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0,
-                linear-gradient(225deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0;
     background-size: 20px 20px; /* Espaciado de las líneas */
-    background-color: #141414; /* Fondo gris muy sutil */
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo gris muy sutil */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -142,10 +138,9 @@ body {
 }
 
 .cardBack {
-    background: linear-gradient(135deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0,
-                linear-gradient(225deg, rgba(169, 169, 169, 0.1) 25%, transparent 25%) 0 0;
     background-size: 20px 20px;
-    background-color: #141414;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo gris muy sutil */
+    box-shadow: 0 0 10px 2px rgba(238, 164, 6, 0.5); /* Borde brillante de color amarillo */
     transform: rotateY(180deg); /* Rotación para la parte trasera */
     display: flex;
     flex-direction: column;
@@ -159,7 +154,7 @@ body {
     width: 100%;
     height: 250px; /* Ajusta la altura de la imagen */
     object-fit: cover; /* Ajusta la imagen para llenar el área sin distorsión */
-    border-radius: 8px;
+    border-radius: 2rem;
     margin-bottom: 27px;
 }
 
