@@ -51,8 +51,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" >
-      <body className="bg-[#1D1E2C] text-white">
-        <div className="flex min-h-screen">
+      <body>
+        <div  className="flex min-h-screen bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900">
           <SideNav items={navigationItems} />
           
           <div className="flex-1">

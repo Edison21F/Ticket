@@ -1,188 +1,209 @@
-import React from 'react';
-import './style.css'; // Asegúrate de que esta ruta sea la correcta
+"use client"
 
-const Dashboard: React.FC = () => {
+import { motion} from "framer-motion"
+import Image from "next/image"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+export default function DashboardPage() {
+
   return (
-    <div className="main-content">
-      {/* Tarjetas de la Parte Superior */}
-      <div className="dashboard-header">
-    <div className="dashboard-card card-1 group">
-        <h3>Número de Usuarios</h3>
-        <p>1,291,922</p>
-        <a href="/admin/usuarios" className="view-detail">View Detail ▶</a>
-        <img className="icon-hover" src="https://cdn-icons-png.flaticon.com/512/5828/5828807.png" alt="Icono 1" />
-    </div>
-    <div className="dashboard-card card-2 group">
-        <h3>Eventos Creados</h3>
-        <p>3,291,922</p>
-        <a href="/admin/eventos" className="view-detail">View Detail ▶</a>
-        <img className="icon-hover" src="https://cdn-icons-png.freepik.com/512/10386/10386037.png" alt="Icono 2" />
-    </div>
-    <div className="dashboard-card card-3 group">
-        <h3>Tickets Disponibles</h3>
-        <p>20.44%</p>
-        <a href="#" className="view-detail">View Detail ▶</a>
-        <img className="icon-hover" src="https://cdn-icons-png.flaticon.com/256/17300/17300802.png" alt="Icono 3" />
-    </div>
-    <div className="dashboard-card card-4 group">
-        <h3>Ventas Realizadas</h3>
-        <p>$3,650.65</p>
-        <a href="#" className="view-detail">View Detail ▶</a>
-        <img className="icon-hover" src="https://cdn-icons-png.freepik.com/512/10103/10103336.png" alt="Icono 4" />
-    </div>
-</div>
+    <div className="flex min-h-screen bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900">
 
-      {/* FINDE DE LAS TARJETAS DE LA PARTE SUPERIROR */}
+      {/* Main Content */}
+      <div className="flex-1">
+        
 
-      {/* INICIO DE LAS TARJETAS DE WELCOME-SECTION */}
-      <div className="welcome-section">
-        <h2>¡Hola, Administrador!</h2>
-        <p>
-          Explora los eventos más destacados y esperados de esta temporada. Han
-          conquistado a miles de usuarios gracias a su impecable organización,
-          contenido excepcional y experiencias inolvidables que no querrás perderte.
-        </p>
-      </div>
-      
-      <div className="events-section">
-        <h2>Eventos a destacar</h2>
-        <div className="product-container">
-          <div className="product-item">
-            <div className="product-image">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMuPz1zW7xkikdAxWK1p3X_KHGIplY9vYcUw&s"
-                alt="Spiderman"
-              />
-              <span className="status">INSTOCK</span>
-            </div>
-            <div className="product-info">
-              <h3>Spiderman No Way Home</h3>
-              <div className="product-actions">
-                <button className="buy-now">Buy Now</button>
-                <button className="wishlist">♥</button>
+        <div className=" p-4 space-y-2">
+          {/* Featured Event Carousel */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 overflow-hidden rounded-2xl bg-black/40 backdrop-blur-xl p-6"
+          >
+            <h2 className="mb-4 text-xl font-bold text-white">Bienvenido Administrador</h2>
+            <div className="relative h-[300px] w-full rounded-xl overflow-hidden">
+              <Image src="/img/admin.png" alt="Evento destacado" fill className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end">
+                <h3 className="text-2xl font-bold text-white">Comienza a gestionar</h3>
+                <p className="text-gray-200">tus eventos y usuarios</p>
               </div>
             </div>
-          </div>
-          
-          <div className="separator"></div>
-          <div className="product-item">
-            <div className="product-image">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMuPz1zW7xkikdAxWK1p3X_KHGIplY9vYcUw&s"
-                alt="Spiderman"
-              />
-              <span className="status">INSTOCK</span>
-            </div>
-            <div className="product-info">
-              <h3>Spiderman No Way Home</h3>
-              <div className="product-actions">
-                <button className="buy-now">Buy Now</button>
-                <button className="wishlist">♥</button>
-              </div>
-            </div>
-          </div>
-          <div className="product-item">
-            <div className="product-image">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMuPz1zW7xkikdAxWK1p3X_KHGIplY9vYcUw&s"
-                alt="Spiderman"
-              />
-              <span className="status">INSTOCK</span>
-            </div>
-            <div className="product-info">
-              <h3>Spiderman No Way Home</h3>
-              <div className="product-actions">
-                <button className="buy-now">Buy Now</button>
-                <button className="wishlist">♥</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* FIN DE LAS TARJETAS DE WELCOME-SECTION */}
+          </motion.div>
 
-      {/* Tarjetas Pequeñas debajo de la Tarjeta Grande */}
-      <div className="modern-cards">
-        {/* Tarjeta 1 */}
-        <div className="modern-card">
-          <div className="modern-card-header">
-            <span>Eventos más Vendidos</span>
-            <div className="modern-icons">
-              <i className="fas fa-heart"></i>
-              <i className="fas fa-share"></i>
-            </div>
+          {/* Stats Grid */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { title: "Total Ventas", value: "$12,345", change: "+12%", gradient: "from-purple-500 to-pink-500" },
+              { title: "Eventos Activos", value: "45", change: "+5%", gradient: "from-blue-500 to-cyan-500" },
+              { title: "Usuarios Nuevos", value: "126", change: "+22%", gradient: "from-green-500 to-emerald-500" },
+              { title: "Tickets Vendidos", value: "1,234", change: "+18%", gradient: "from-yellow-500 to-orange-500" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.title}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Card className="border-purple-500/20 bg-black/40 backdrop-blur-xl overflow-hidden">
+                  <div className={`h-1 w-full bg-gradient-to-r ${stat.gradient}`} />
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-200">{stat.title}</CardTitle>
+                    <motion.span
+                      className="text-xs text-green-500"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: i * 0.1 + 0.3 }}
+                    >
+                      {stat.change}
+                    </motion.span>
+                  </CardHeader>
+                  <CardContent>
+                    <div
+                      className={`text-2xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}
+                    >
+                      {stat.value}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </div>
-          <div className="modern-card-content">
-            <div className="event-background">🎟️Cine: Spider-Man: No Way Home</div>
-            <p>
-              Descubre los eventos más populares y demandados de esta temporada!
-              Estos eventos han cautivado a miles de usuarios y se han destacado
-              por su excelente organización, contenido de calidad y experiencias
-              únicas.
-            </p>
-            <button className="modern-card-button">Ver Lista</button>
-          </div>
-          <div className="modern-card-footer">
-            <p>Cantidad de eventos vendidos</p>
-            <p>120 Vendidos</p>
-          </div>
-        </div>
 
-        {/* Tarjeta 2 */}
-        <div className="modern-card">
-          <div className="modern-card-header">
-            <span>Gestionar los Usuarios</span>
-            <div className="modern-icons">
-              <i className="fas fa-heart"></i>
-              <i className="fas fa-share"></i>
-            </div>
-          </div>
-          <div className="modern-card-content">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/14427/14427123.png"
-              alt="Card Image"
-              className="modern-card-image"
-            />
-            <button className="modern-card-button">Ver Lista</button>
-          </div>
-          <div className="modern-card-footer">
-            <p>Gestionar los Usuarios</p>
-            <p>250 Usuarios Activos</p>
-          </div>
-        </div>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            {/* Upcoming Events */}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <Card className="border-purple-500/20 bg-black/40 backdrop-blur-xl">
+                <CardHeader>
+                  <CardTitle className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    Próximos Eventos
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        title: "Concierto Guardarraya en Vivo",
+                        date: "15 Mar",
+                        venue: "Estadio Nacional",
+                        image: "/img/guardarraya.jpg",
+                      },
+                      {
+                        title: "Spiderman: No Way Home",
+                        date: "22 Mar",
+                        venue: "Plaza Mayor",
+                        image: "/img/spiderman.jpeg",
+                      },
+                      {
+                        title: "Metro de Quito",
+                        date: "29 Mar",
+                        venue: "Recreo",
+                        image: "/img/metro.webp",
+                      },
+                    ].map((event, i) => (
+                      <motion.div
+                        key={event.title}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: i * 0.1 + 0.5 }}
+                        className="flex items-center gap-4 rounded-lg bg-white/5 p-3"
+                      >
+                        <div className="relative h-12 w-12 overflow-hidden rounded-lg">
+                          <Image
+                            src={event.image || "/placeholder.svg"}
+                            alt={event.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-white">{event.title}</p>
+                          <p className="text-sm text-gray-400">{event.venue}</p>
+                        </div>
+                        <span className="text-sm text-purple-400">{event.date}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-        {/* Tarjeta 3 */}
-        <div className="modern-card">
-          <div className="modern-card-header">
-            <span>Gestionar servicios</span>
-            <div className="modern-icons">
-              <i className="fas fa-heart"></i>
-              <i className="fas fa-share"></i>
-            </div>
-          </div>
-          <div className="modern-card-content">
-            <img
-              src="https://cdn-icons-png.freepik.com/512/5474/5474438.png"
-              alt="Card Image"
-              className="modern-card-image"
-            />
-            <button className="modern-card-button">Ver servicios</button>
-          </div>
-          <div className="modern-card-footer">
-            <p>Gestionar Servicios</p>
-            <p>35 Servicios Activos</p>
+            {/* Sales by Category */}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <Card className="border-purple-500/20 bg-black/40 backdrop-blur-xl">
+                <CardHeader>
+                  <CardTitle className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                    Ventas por Categoría
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        category: "Conciertos",
+                        amount: "$5,234",
+                        percentage: "42%",
+                        gradient: "from-purple-500 to-pink-500",
+                      },
+                      { category: "Cine", amount: "$3,126", percentage: "25%", gradient: "from-blue-500 to-cyan-500" },
+                      {
+                        category: "Transporte",
+                        amount: "$2,845",
+                        percentage: "23%",
+                        gradient: "from-green-500 to-emerald-500",
+                      },
+                      {
+                        category: "Otros",
+                        amount: "$1,140",
+                        percentage: "10%",
+                        gradient: "from-yellow-500 to-orange-500",
+                      },
+                    ].map((item, i) => (
+                      <motion.div
+                        key={item.category}
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: i * 0.1 + 0.6 }}
+                        className="flex items-center justify-between"
+                      >
+                        <div>
+                          <p className="font-medium text-white">{item.category}</p>
+                          <p className={`text-sm bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}>
+                            {item.amount}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-24 overflow-hidden rounded-full bg-gray-700">
+                            <motion.div
+                              className={`h-full bg-gradient-to-r ${item.gradient}`}
+                              initial={{ width: 0 }}
+                              animate={{ width: item.percentage }}
+                              transition={{ delay: i * 0.1 + 0.7, duration: 0.5 }}
+                            />
+                          </div>
+                          <span className="text-sm text-gray-400">{item.percentage}</span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
-
-// Página asíncrona con exportación predeterminada
-export default async function Page() {
-  return (
-    <div>
-      <Dashboard />
-    </div>
-  );
+  )
 }
+
