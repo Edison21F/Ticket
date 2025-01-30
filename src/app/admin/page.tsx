@@ -15,22 +15,6 @@ export default function DashboardPage() {
         
 
         <div className=" p-4 space-y-2">
-          {/* Featured Event Carousel */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6 overflow-hidden rounded-2xl bg-black/40 backdrop-blur-xl p-6"
-          >
-            <h2 className="mb-4 text-xl font-bold text-white">Bienvenido Administrador</h2>
-            <div className="relative h-[300px] w-full rounded-xl overflow-hidden">
-              <Image src="/img/admin.png" alt="Evento destacado" fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end">
-                <h3 className="text-2xl font-bold text-white">Comienza a gestionar</h3>
-                <p className="text-gray-200">tus eventos y usuarios</p>
-              </div>
-            </div>
-          </motion.div>
-
           {/* Stats Grid */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
@@ -69,6 +53,20 @@ export default function DashboardPage() {
                 </Card>
               </motion.div>
             ))}
+          </div>
+          <div className="flex-1">
+            <Card className="border-purple-500/20 bg-black/40 backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  Bienvenido de vuelta, Admin
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  Revisa tus estadísticas y actualiza tus eventos con la información más reciente.
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
