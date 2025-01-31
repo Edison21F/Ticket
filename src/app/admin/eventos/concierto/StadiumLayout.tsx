@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
-//ggg
+import AdminView from './AdminView'; // Asegúrate de importar el componente AdminView
+
 // TIPOS Y INTERFACES
 type EstadoAsiento = 'disponible' | 'reservado' | 'vendido';
 
@@ -214,6 +215,7 @@ const StadiumLayout: React.FC = () => {
   const [asientos, setAsientos] = useState<Asiento[]>(generarAsientos());
   const [asientosSeleccionados, setAsientosSeleccionados] = useState<Asiento[]>([]);
   const [mostrarMensajeExito, setMostrarMensajeExito] = useState(false);
+  const [mostrarAdminView, setMostrarAdminView] = useState(false); // Estado para controlar la vista de Admin
 
   const manejarSeleccionAsiento = (asiento: Asiento) => {
     if (asientosSeleccionados.find(a => a.id === asiento.id)) {
@@ -247,6 +249,23 @@ const StadiumLayout: React.FC = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-2 md:p-4 bg-transparent min-h-screen">
+      {/* Contenedor para el botón de Admin */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setMostrarAdminView(!mostrarAdminView)}
+          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+        >
+          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" />
+          </svg>
+          {mostrarAdminView ? 'Ocultar Vista de Administración' : 'Mostrar Vista de Administración'}
+        </button>
+      </div>
+
+      {/* Mostrar AdminView si el estado es verdadero */}
+      {mostrarAdminView && <AdminView />}
+
       {/* Escenario */}
       <div className="w-full max-w-4xl mx-auto mb-4 md:mb-8">
         <div className="bg-amber-500 h-12 md:h-20 rounded-t-full relative flex items-start justify-center">
@@ -305,81 +324,80 @@ const StadiumLayout: React.FC = () => {
           <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
             {asientosSeleccionados.map(asiento => (
               <div key={asiento.id} className="flex justify-between items-center text-sm md:text-base text-gray-300">
-                {/* Continuación del código anterior */}
-              <span>
-                {obtenerNombreSeccion(asiento.seccion)} - Fila {asiento.fila} Asiento {asiento.numero}
-              </span>
-              <span className="font-bold text-gray-200">${asiento.precio}</span>
-            </div>
-          ))}
-          <div className="border-t border-gray-700 pt-2 mt-2">
-            <div className="flex justify-between font-bold text-gray-200">
-              <span>Total:</span>
-              <span>${asientosSeleccionados.reduce((sum, asiento) => sum + asiento.precio, 0)}</span>
-            </div>
-          </div>
-        </div> 
-        <div className="flex gap-2">
-          <button
-            onClick={() => setAsientosSeleccionados([])}
-            className="flex-1 px-4 py-2 bg-gray-700 text-sm md:text-base text-gray-200 rounded-lg 
-              hover:bg-gray-600 transition-colors duration-200"
-          >
-            Limpiar
-          </button>
-          <button
-            onClick={manejarReserva}
-            className="flex-1 px-4 py-2 bg-green-600 text-sm md:text-base text-white rounded-lg 
-              hover:bg-green-700 transition-colors duration-200"
-          >
-            Reservar
-          </button>
-        </div>
-      </div>
-    )}
-  
-    {/* Mensaje de Éxito con Detalles */}
-    {mostrarMensajeExito && (
-      <div className="fixed bottom-4 left-4 bg-transparent border-l-4 border-green-500 p-4 rounded shadow-lg 
-      text-green-100 w-full max-w-xs md:max-w-md z-50">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <p className="text-base md:text-lg font-medium text-green-100">
-              ¡Reserva exitosa!
-            </p>
-            <div className="mt-1 text-xs md:text-sm">
-              {asientosSeleccionados.map((asiento) => (
-                <p key={asiento.id}>
+                <span>
                   {obtenerNombreSeccion(asiento.seccion)} - Fila {asiento.fila} Asiento {asiento.numero}
-                </p>
-              ))}
+                </span>
+                <span className="font-bold text-gray-200">${asiento.precio}</span>
+              </div>
+            ))}
+            <div className="border-t border-gray-700 pt-2 mt-2">
+              <div className="flex justify-between font-bold text-gray-200">
+                <span>Total:</span>
+                <span>${asientosSeleccionados.reduce((sum, asiento) => sum + asiento.precio, 0)}</span>
+              </div>
+            </div>
+          </div> 
+          <div className="flex gap-2">
+            <button
+              onClick={() => setAsientosSeleccionados([])}
+              className="flex-1 px-4 py-2 bg-gray-700 text-sm md:text-base text-gray-200 rounded-lg 
+                hover:bg-gray-600 transition-colors duration-200"
+            >
+              Limpiar
+            </button>
+            <button
+              onClick={manejarReserva}
+              className="flex-1 px-4 py-2 bg-green-600 text-sm md:text-base text-white rounded-lg 
+                hover:bg-green-700 transition-colors duration-200"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+      )}
+  
+      {/* Mensaje de Éxito con Detalles */}
+      {mostrarMensajeExito && (
+        <div className="fixed bottom-4 left-4 bg-transparent border-l-4 border-green-500 p-4 rounded shadow-lg 
+        text-green-100 w-full max-w-xs md:max-w-md z-50">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-base md:text-lg font-medium text-green-100">
+                ¡Reserva exitosa!
+              </p>
+              <div className="mt-1 text-xs md:text-sm">
+                {asientosSeleccionados.map((asiento) => (
+                  <p key={asiento.id}>
+                    {obtenerNombreSeccion(asiento.seccion)} - Fila {asiento.fila} Asiento {asiento.numero}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
-    {/* Leyenda de Estados de Asientos */}
-    <div className="mt-4 md:mt-8 flex flex-wrap gap-4 md:gap-6 justify-center">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-green-400 rounded-sm" />
-        <span className="text-xs md:text-sm text-gray-300">Disponible</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-yellow-400 rounded-sm" />
-        <span className="text-xs md:text-sm text-gray-300">Reservado</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-red-400 rounded-sm" />
-        <span className="text-xs md:text-sm text-gray-300">Vendido</span>
+      {/* Leyenda de Estados de Asientos */}
+      <div className="mt-4 md:mt-8 flex flex-wrap gap-4 md:gap-6 justify-center">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-green-400 rounded-sm" />
+          <span className="text-xs md:text-sm text-gray-300">Disponible</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-yellow-400 rounded-sm" />
+          <span className="text-xs md:text-sm text-gray-300">Reservado</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-red-400 rounded-sm" />
+          <span className="text-xs md:text-sm text-gray-300">Vendido</span>
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
