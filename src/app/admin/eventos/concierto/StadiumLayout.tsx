@@ -1,326 +1,386 @@
 'use client'
 import React, { useState } from 'react';
 
-type SeatStatus = 'available' | 'reserved' | 'sold';
+// TIPOS Y INTERFACES
+type EstadoAsiento = 'disponible' | 'reservado' | 'vendido';
 
-interface Section {
+interface Seccion {
   id: string;
-  name: string;
+  nombre: string;
   color: string;
-  capacity: number;
-  gates: string[];
-  position: string;
-  price: number;
+  filaInicio: string;
+  filaFin: string;
+  asientosPorFila: number[];
+  precio: number;
 }
 
-interface Seat {
+interface Asiento {
   id: string;
-  number: number;
-  row: number;
-  section: string;
-  status: SeatStatus;
-  price: number;
+  numero: number;
+  fila: string;
+  seccion: string;
+  estado: EstadoAsiento;
+  precio: number;
 }
 
-interface StadiumLayoutProps {
-  isAdmin?: boolean;
-  onSeatStatusChange?: (seatId: string, status: SeatStatus) => void;
-  onSeatDelete?: (seatId: string) => void;
-  onSeatPriceChange?: (seatId: string, price: number) => void;
-}
-
-const SECTIONS: Section[] = [
-    { 
-        id: 'vip',
-        name: 'VIP',
-        color: 'bg-purple-600',
-        capacity: 100,
-        gates: ['14'],
-        position: 'top-[10%] left-1/2 transform -translate-x-1/2 w-[30%] h-[20%]',
-        price: 500
-      },
-      {
-        id: 'general',
-        name: 'GENERAL',
-        color: 'bg-blue-600',
-        capacity: 500,
-        gates: ['7A', '7B', '8', '9'],
-        position: 'bottom-0 left-1/2 transform -translate-x-1/2 w-[60%] h-[25%]',
-        price: 200
-      },
-      {
-        id: 'tribuna',
-        name: 'TRIBUNA',
-        color: 'bg-red-600',
-        capacity: 200,
-        gates: ['3B', '4A', '4B', '5', '6'],
-        position: 'left-0 top-1/2 transform -translate-y-1/2 w-[20%] h-[100%]',
-        price: 300
-      },
-      {
-        id: 'preferencia',
-        name: 'PREFERENCIA',
-        color: 'bg-pink-600',
-        capacity: 200,
-        gates: ['11', '12', '13'],
-        position: 'right-0 top-1/2 transform -translate-y-1/2 w-[20%] h-[100%]',
-        price: 300
-      }
+// Sections Configuration
+const SECCIONES: Seccion[] = [
+  {
+    id: 'vip',
+    nombre: 'VIP',
+    color: 'bg-purple-100',
+    filaInicio: 'A',
+    filaFin: 'E',
+    asientosPorFila: Array(5).fill(20),
+    precio: 150
+  },
+  {
+    id: 'preferencial',
+    nombre: 'PREFERENCIAL',
+    color: 'bg-orange-100',
+    filaInicio: 'A',
+    filaFin: 'H',
+    asientosPorFila: Array(8).fill(25),
+    precio: 100
+  },
+  {
+    id: 'tribuna',
+    nombre: 'TRIBUNA',
+    color: 'bg-blue-100',
+    filaInicio: 'A',
+    filaFin: 'K',
+    asientosPorFila: Array(11).fill(30),
+    precio: 50
+  }
 ];
 
-const generateMockSeats = (): Seat[] => 
-  Array.from({ length: 100 }, (_, i) => ({
-    id: `seat-${i}`,
-    number: i + 1,
-    row: Math.floor(i / 10) + 1,
-    section: SECTIONS[Math.floor(Math.random() * SECTIONS.length)].id,
-    status: Math.random() > 0.3 ? 'available' : Math.random() > 0.5 ? 'reserved' : 'sold',
-    price: Math.floor(Math.random() * 50 + 50) * 10
-  }));
+const SECCIONES_LATERALES = [
+  {
+    id: 'platinum-derecha',
+    nombre: 'PLATINUM DER',
+    numeroInicio: 1,
+    numeroFin: 4,
+    filas: 5,
+    posicion: 'derecha',
+    precio: 200
+  },
+  {
+    id: 'platinum-izquierda',
+    nombre: 'PLATINUM IZQ',
+    numeroInicio: 1,
+    numeroFin: 4,
+    filas: 5,
+    posicion: 'izquierda',
+    precio: 200
+  }
+];
 
-export const StadiumLayout = ({ 
-  isAdmin = false, 
-  onSeatStatusChange,
-  onSeatDelete,
-  onSeatPriceChange 
-}: StadiumLayoutProps) => {
+// Seat Generation Function
+const generarAsientos = () => {
+  const asientos: Asiento[] = [];
   
-    const [selectedSection, setSelectedSection] = useState<string | null>(null);
-    const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
-    const [seats, setSeats] = useState<Seat[]>(generateMockSeats());
-    const [editingSeat, setEditingSeat] = useState<Seat | null>(null);
-    const [newPrice, setNewPrice] = useState<string>('');
-  
-    const getSectionSeats = (sectionId: string) => 
-      seats.filter((seat) => seat.section === sectionId);
-  
-    const handleStatusChange = (seatId: string, status: SeatStatus) => {
-      const updatedSeats = seats.map(seat =>
-        seat.id === seatId ? { ...seat, status } : seat
-      );
-      setSeats(updatedSeats);
-      onSeatStatusChange?.(seatId, status);
-    };
-  
-    const handleDelete = (seatId: string) => {
-      if (!onSeatDelete) return;
-      const updatedSeats = seats.filter(seat => seat.id !== seatId);
-      setSeats(updatedSeats);
-      onSeatDelete(seatId);
-    };
-  
-    const handlePriceChange = (seatId: string) => {
-      const price = Number(newPrice);
-      if (!isNaN(price) && price > 0 && onSeatPriceChange) {
-        const updatedSeats = seats.map(seat =>
-          seat.id === seatId ? { ...seat, price } : seat
-        );
-        setSeats(updatedSeats);
-        onSeatPriceChange(seatId, price);
-        setEditingSeat(null);
-        setNewPrice('');
+  SECCIONES.forEach(seccion => {
+    const letrasFilas = Array.from(
+      { length: seccion.filaFin.charCodeAt(0) - seccion.filaInicio.charCodeAt(0) + 1 },
+      (_, i) => String.fromCharCode(seccion.filaInicio.charCodeAt(0) + i)
+    );
+    
+    letrasFilas.forEach((fila, indiceFila) => {
+      const numAsientos = seccion.asientosPorFila[indiceFila] || seccion.asientosPorFila[0];
+      for (let numAsiento = 1; numAsiento <= numAsientos; numAsiento++) {
+        asientos.push({
+          id: `${seccion.id}-${fila}${numAsiento}`,
+          numero: numAsiento,
+          fila: fila,
+          seccion: seccion.id,
+          estado: Math.random() > 0.3 ? 'disponible' : Math.random() > 0.5 ? 'reservado' : 'vendido',
+          precio: seccion.precio
+        });
       }
-    };
+    });
+  });
+
+  SECCIONES_LATERALES.forEach(seccion => {
+    for (let fila = 1; fila <= seccion.filas; fila++) {
+      for (let numBox = seccion.numeroInicio; numBox <= seccion.numeroFin; numBox++) {
+        asientos.push({
+          id: `${seccion.id}-${fila}-${numBox}`,
+          numero: numBox,
+          fila: fila.toString(),
+          seccion: seccion.id,
+          estado: Math.random() > 0.3 ? 'disponible' : Math.random() > 0.5 ? 'reservado' : 'vendido',
+          precio: seccion.precio
+        });
+      }
+    }
+  });
+
+  return asientos;
+};
+
+// Componentes de Sección
+const SeccionPrincipal = ({ 
+  seccion, 
+  asientos,
+  onSeleccionarAsiento
+}: { 
+  seccion: Seccion, 
+  asientos: Asiento[],
+  onSeleccionarAsiento: (asiento: Asiento) => void
+}) => {
+  const asientosSeccion = asientos.filter(asiento => asiento.seccion === seccion.id);
   
-    const handleSeatSelection = (seat: Seat) => {
-      if (isAdmin || seat.status !== 'available') return;
-      setSelectedSeat(seat);
-    };
-  
-    const handleReservation = (seat: Seat) => {
-      handleStatusChange(seat.id, 'reserved');
-      setSelectedSeat(null);
-    };
-  
-    return (
-      <div className="relative w-full max-w-4xl mx-auto p-4">
-        {/* Stage Area */}
-        <div className="w-full h-24 bg-gradient-to-b from-purple-900 to-purple-800 rounded-t-lg mb-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_0%,_transparent_60%)] animate-pulse" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-white text-2xl font-bold tracking-wider">STAGE</div>
+  return (
+    <div className="flex flex-col gap-0.5 overflow-x-auto">
+      {Array.from({ length: seccion.filaFin.charCodeAt(0) - seccion.filaInicio.charCodeAt(0) + 1 }).map((_, indiceFila) => {
+        const letraFila = String.fromCharCode(seccion.filaInicio.charCodeAt(0) + indiceFila);
+        const asientosFila = asientosSeccion.filter(asiento => asiento.fila === letraFila);
+        
+        return (
+          <div key={letraFila} className="flex gap-0.5 justify-center items-center text-xs min-w-max px-4">
+            <span className="w-6 text-right pr-2 text-gray-500 font-medium">{letraFila}</span>
+            {asientosFila.map(asiento => (
+              <button
+                key={asiento.id}
+                onClick={() => asiento.estado === 'disponible' && onSeleccionarAsiento(asiento)}
+                className={`w-4 h-4 md:w-5 md:h-5 flex items-center justify-center text-[8px] md:text-[10px] font-medium
+                  rounded transition-all duration-200 ${
+                  asiento.estado === 'disponible' 
+                    ? 'bg-green-400 hover:bg-green-500 text-white' 
+                    : asiento.estado === 'reservado' 
+                    ? 'bg-yellow-400 text-white cursor-not-allowed' 
+                    : 'bg-red-400 text-white cursor-not-allowed'
+                }`}
+                title={`${asiento.fila}${asiento.numero} - $${asiento.precio}`}
+              >
+                {asiento.numero}
+              </button>
+            ))}
+            <span className="w-6 text-left pl-2 text-gray-500 font-medium">{letraFila}</span>
           </div>
-          <div className="absolute bottom-0 w-full h-8 bg-gradient-to-b from-transparent to-black/50" />
+        );
+      })}
+    </div>
+  );
+};
+
+const SeccionLateral = ({
+  seccion,
+  asientos,
+  onSeleccionarAsiento
+}: {
+  seccion: typeof SECCIONES_LATERALES[0],
+  asientos: Asiento[],
+  onSeleccionarAsiento: (asiento: Asiento) => void
+}) => {
+  const asientosSeccion = asientos.filter(asiento => asiento.seccion === seccion.id);
+  
+  return (
+    <div className="flex flex-col gap-1">
+      {Array.from({ length: seccion.filas }).map((_, indiceFila) => (
+        <div key={indiceFila} className="flex gap-1">
+          {Array.from({ length: seccion.numeroFin - seccion.numeroInicio + 1 }).map((_, indiceAsiento) => {
+            const asiento = asientosSeccion.find(
+              a => a.fila === (indiceFila + 1).toString() && a.numero === indiceAsiento + seccion.numeroInicio
+            );
+            if (!asiento) return null;
+            
+            return (
+              <button
+                key={asiento.id}
+                onClick={() => asiento.estado === 'disponible' && onSeleccionarAsiento(asiento)}
+                className={`w-4 h-4 md:w-6 md:h-6 flex items-center justify-center text-[8px] md:text-[10px] font-medium
+                  rounded transition-all duration-200 ${
+                  asiento.estado === 'disponible' 
+                    ? 'bg-blue-400 hover:bg-blue-500 text-white' 
+                    : asiento.estado === 'reservado' 
+                    ? 'bg-yellow-400 text-white cursor-not-allowed' 
+                    : 'bg-red-400 text-white cursor-not-allowed'
+                }`}
+                title={`Platinum ${asiento.fila}-${asiento.numero} - $${asiento.precio}`}
+              >
+                {asiento.numero}
+              </button>
+            );
+          })}
         </div>
-  
-        {/* Stadium Layout */}
-        <div className="relative aspect-[2/1] bg-gray-900 rounded-[100%] overflow-hidden border-4 border-purple-500/30">
-          <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(139,92,246,0.1)_0%,_transparent_60%)]" />
-  
-          {/* Center Stage Area */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] h-[30%] 
-            bg-gradient-to-b from-purple-900 to-purple-800 rounded-[100%] border-2 border-purple-400/30 
-            flex items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_0%,_transparent_60%)] animate-pulse" />
-            <div className="w-[80%] h-[80%] border border-purple-400/20 rounded-[100%]" />
+      ))}
+    </div>
+  );
+};
+
+// Componente Principal
+const StadiumLayout: React.FC = () => {
+  const [asientos, setAsientos] = useState<Asiento[]>(generarAsientos());
+  const [asientosSeleccionados, setAsientosSeleccionados] = useState<Asiento[]>([]);
+  const [mostrarMensajeExito, setMostrarMensajeExito] = useState(false);
+
+  const manejarSeleccionAsiento = (asiento: Asiento) => {
+    if (asientosSeleccionados.find(a => a.id === asiento.id)) {
+      setAsientosSeleccionados(asientosSeleccionados.filter(a => a.id !== asiento.id));
+    } else {
+      setAsientosSeleccionados([...asientosSeleccionados, asiento]);
+    }
+  };
+
+  const manejarReserva = () => {
+    const asientosActualizados = asientos.map(asiento => {
+      if (asientosSeleccionados.find(a => a.id === asiento.id)) {
+        return { ...asiento, estado: 'reservado' as EstadoAsiento };
+      }
+      return asiento;
+    });
+    
+    setAsientos(asientosActualizados);
+    setAsientosSeleccionados([]);
+    setMostrarMensajeExito(true);
+    setTimeout(() => setMostrarMensajeExito(false), 3000);
+  };
+
+  const obtenerNombreSeccion = (seccionId: string) => {
+    const seccionPrincipal = SECCIONES.find(s => s.id === seccionId);
+    if (seccionPrincipal) return seccionPrincipal.nombre;
+    
+    const seccionLateral = SECCIONES_LATERALES.find(s => s.id === seccionId);
+    return seccionLateral ? seccionLateral.nombre : seccionId;
+  };
+
+  return (
+    <div className="w-full max-w-7xl mx-auto p-2 md:p-4 bg-transparent min-h-screen">
+      {/* Escenario */}
+      <div className="w-full max-w-4xl mx-auto mb-4 md:mb-8">
+        <div className="bg-amber-500 h-12 md:h-20 rounded-t-full relative flex items-start justify-center">
+          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 
+            bg-amber-600 text-black px-4 md:px-8 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold">
+            ESCENARIO
           </div>
-  
-          {/* Sections */}
-          {SECTIONS.map((section) => (
-            <div
-              key={section.id}
-              className={`absolute ${section.position} ${section.color} cursor-pointer 
-                hover:opacity-90 transition-all duration-300 flex items-center justify-center
-                group hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/20`}
-              onClick={() => setSelectedSection(section.id)}
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
-              <div className="relative flex flex-col items-center">
-                <span className="text-white font-bold text-sm mb-1">{section.name}</span>
-                <span className="text-white/80 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                  Desde ${section.price}
-                </span>
+        </div>
+      </div>
+    
+      {/* Layout del Concierto */}
+      <div className="w-full max-w-6xl mx-auto bg-transparent rounded-lg p-4 md:p-8 relative">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 md:gap-8">
+          {/* Platinum Izquierda */}
+          <div className="md:order-1">
+            <h3 className="text-xs md:text-sm font-bold mb-2 text-center text-gray-200">PLATINUM IZQ</h3>
+            <SeccionLateral 
+              seccion={SECCIONES_LATERALES.find(s => s.id === 'platinum-izquierda')!}
+              asientos={asientos}
+              onSeleccionarAsiento={manejarSeleccionAsiento}
+            />
+          </div>
+    
+          {/* Secciones Principales */}
+          <div className="space-y-4 md:space-y-8 flex-grow overflow-x-auto md:order-2">
+            {SECCIONES.map((seccion) => (
+              <div key={seccion.id} className="relative">
+                <h3 className="text-xs md:text-sm font-bold mb-2 md:mb-4 text-center text-gray-200">{seccion.nombre}</h3>
+                <SeccionPrincipal 
+                  seccion={seccion}
+                  asientos={asientos}
+                  onSeleccionarAsiento={manejarSeleccionAsiento}
+                />
               </div>
+            ))}
+          </div>
+    
+          {/* Platinum Derecha */}
+          <div className="md:order-3">
+            <h3 className="text-xs md:text-sm font-bold mb-2 text-center text-gray-200">PLATINUM DER</h3>
+            <SeccionLateral 
+              seccion={SECCIONES_LATERALES.find(s => s.id === 'platinum-derecha')!}
+              asientos={asientos}
+              onSeleccionarAsiento={manejarSeleccionAsiento}
+            />
+          </div>
+        </div>
+      </div>
+    
+      {/* Panel de Asientos Seleccionados */}
+      {asientosSeleccionados.length > 0 && (
+        <div className="fixed bottom-4 right-4 bg-transparent rounded-lg shadow-2xl p-4 w-full max-w-xs md:w-80 border border-gray-700">
+          <h3 className="text-base md:text-lg font-bold mb-2 text-gray-200">
+            Asientos Seleccionados ({asientosSeleccionados.length})
+          </h3>
+          <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
+            {asientosSeleccionados.map(asiento => (
+              <div key={asiento.id} className="flex justify-between items-center text-sm md:text-base text-gray-300">
+                {/* Continuación del código anterior */}
+              <span>
+                {obtenerNombreSeccion(asiento.seccion)} - Fila {asiento.fila} Asiento {asiento.numero}
+              </span>
+              <span className="font-bold text-gray-200">${asiento.precio}</span>
             </div>
           ))}
-  
-          {/* Gates */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-purple-200 text-sm font-bold">
-            ENTRADA PRINCIPAL
-          </div>
-        </div>
-  
-        {/* Selected Section Detail */}
-        {selectedSection && (
-          <div className="mt-8 p-6 bg-gray-900 rounded-lg shadow-lg border border-purple-500/30">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className="text-2xl font-bold text-purple-400">
-                  {SECTIONS.find((s) => s.id === selectedSection)?.name}
-                </h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  Selecciona un asiento disponible
-                </p>
-              </div>
-              <button 
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 
-                  transition-colors duration-200"
-                onClick={() => setSelectedSection(null)}
-              >
-                Cerrar
-              </button>
+          <div className="border-t border-gray-700 pt-2 mt-2">
+            <div className="flex justify-between font-bold text-gray-200">
+              <span>Total:</span>
+              <span>${asientosSeleccionados.reduce((sum, asiento) => sum + asiento.precio, 0)}</span>
             </div>
+          </div>
+        </div> 
+        <div className="flex gap-2">
+          <button
+            onClick={() => setAsientosSeleccionados([])}
+            className="flex-1 px-4 py-2 bg-gray-700 text-sm md:text-base text-gray-200 rounded-lg 
+              hover:bg-gray-600 transition-colors duration-200"
+          >
+            Limpiar
+          </button>
+          <button
+            onClick={manejarReserva}
+            className="flex-1 px-4 py-2 bg-green-600 text-sm md:text-base text-white rounded-lg 
+              hover:bg-green-700 transition-colors duration-200"
+          >
+            Reservar
+          </button>
+        </div>
+      </div>
+    )}
   
-            <div className="grid grid-cols-10 gap-2">
-              {getSectionSeats(selectedSection).map((seat) => (
-                <div key={seat.id} className="relative group">
-                  <button
-                    className={`w-10 h-10 rounded-lg text-sm font-bold flex items-center justify-center
-                      transition-all duration-200 ${
-                        seat.status === 'available' 
-                          ? 'bg-green-500 text-white hover:bg-green-600 hover:scale-110' 
-                          : seat.status === 'reserved'
-                          ? 'bg-yellow-500 text-white cursor-not-allowed'
-                          : 'bg-red-500 text-white cursor-not-allowed'
-                      }`}
-                    onClick={() => handleSeatSelection(seat)}
-                    disabled={seat.status !== 'available' && !isAdmin}
-                  >
-                    {seat.number}
-                  </button>
-  
-                  {isAdmin && (
-                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 hidden group-hover:flex 
-                      flex-col items-center gap-1 bg-gray-800 p-2 rounded-lg shadow-lg z-10">
-                      <select
-                        className="text-xs bg-gray-700 text-white rounded px-1 py-0.5"
-                        value={seat.status}
-                        onChange={(e) => handleStatusChange(seat.id, e.target.value as SeatStatus)}
-                      >
-                        <option value="available">Disponible</option>
-                        <option value="reserved">Reservado</option>
-                        <option value="sold">Vendido</option>
-                      </select>
-                      {editingSeat?.id === seat.id ? (
-                        <div className="flex gap-1">
-                          <input
-                            type="number"
-                            value={newPrice}
-                            onChange={(e) => setNewPrice(e.target.value)}
-                            className="w-16 text-xs bg-gray-700 text-white rounded px-1 py-0.5"
-                            placeholder="Precio"
-                          />
-                          <button
-                            onClick={() => handlePriceChange(seat.id)}
-                            className="text-xs bg-green-600 text-white rounded px-2 py-0.5"
-                          >
-                            ✓
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => setEditingSeat(seat)}
-                          className="text-xs bg-blue-600 text-white rounded px-2 py-0.5 w-full"
-                        >
-                          ${seat.price}
-                        </button>
-                      )}
-                      {onSeatDelete && (
-                        <button
-                          onClick={() => handleDelete(seat.id)}
-                          className="text-xs bg-red-600 text-white rounded px-2 py-0.5 w-full"
-                        >
-                          Eliminar
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
+    {/* Mensaje de Éxito con Detalles */}
+    {mostrarMensajeExito && (
+      <div className="fixed bottom-4 left-4 bg-transparent border-l-4 border-green-500 p-4 rounded shadow-lg 
+      text-green-100 w-full max-w-xs md:max-w-md z-50">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <p className="text-base md:text-lg font-medium text-green-100">
+              ¡Reserva exitosa!
+            </p>
+            <div className="mt-1 text-xs md:text-sm">
+              {asientosSeleccionados.map((asiento) => (
+                <p key={asiento.id}>
+                  {obtenerNombreSeccion(asiento.seccion)} - Fila {asiento.fila} Asiento {asiento.numero}
+                </p>
               ))}
             </div>
-  
-            <div className="mt-6 flex justify-between text-gray-400 text-sm">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded bg-green-500" />
-                  <span>Disponible</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded bg-yellow-500" />
-                  <span>Reservado</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded bg-red-500" />
-                  <span>Vendido</span>
-                </div>
-              </div>
-              <div>
-                Total asientos: {getSectionSeats(selectedSection).length}
-              </div>
-            </div>
           </div>
-        )}
-  
-        {/* Seat Selection Modal */}
-        {selectedSeat && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-900 p-8 rounded-lg max-w-md w-full border border-purple-500/30">
-              <h3 className="text-2xl font-bold text-purple-400 mb-6">Detalles del Asiento</h3>
-              <div className="space-y-4 text-gray-300">
-                <p>Sección: {SECTIONS.find(s => s.id === selectedSeat.section)?.name}</p>
-                <p>Fila: {selectedSeat.row}</p>
-                <p>Número: {selectedSeat.number}</p>
-                <p className="text-xl font-bold text-purple-400">Precio: ${selectedSeat.price}</p>
-              </div>
-              <div className="flex gap-4 mt-8">
-                <button 
-                  className="flex-1 px-4 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600
-                    transition-colors duration-200"
-                  onClick={() => setSelectedSeat(null)}
-                >
-                  Cancelar
-                </button>
-                <button 
-                  className="flex-1 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700
-                    transition-colors duration-200"
-                  onClick={() => handleReservation(selectedSeat)}
-                >
-                  Reservar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
-    );
+    )}
+
+    {/* Leyenda de Estados de Asientos */}
+    <div className="mt-4 md:mt-8 flex flex-wrap gap-4 md:gap-6 justify-center">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 bg-green-400 rounded-sm" />
+        <span className="text-xs md:text-sm text-gray-300">Disponible</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 bg-yellow-400 rounded-sm" />
+        <span className="text-xs md:text-sm text-gray-300">Reservado</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 bg-red-400 rounded-sm" />
+        <span className="text-xs md:text-sm text-gray-300">Vendido</span>
+      </div>
+    </div>
+  </div>
+  );
 };
+
+export default StadiumLayout;

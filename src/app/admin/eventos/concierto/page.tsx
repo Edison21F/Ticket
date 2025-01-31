@@ -1,6 +1,6 @@
 'use client';
 
-import { StadiumLayout } from './StadiumLayout';
+import StadiumLayout from './StadiumLayout';
 
 export default function ConcertPage() {
   const handleSeatStatusChange = (seatId: string, status: string) => {
