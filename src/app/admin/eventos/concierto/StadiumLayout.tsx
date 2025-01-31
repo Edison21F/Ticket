@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-
+//ggg
 // TIPOS Y INTERFACES
 type EstadoAsiento = 'disponible' | 'reservado' | 'vendido';
 
