@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import AdminView from './AdminView'; // Asegúrate de importar el componente AdminView
+import AdminView from './AdminView';
 
 // TIPOS Y INTERFACES
 type EstadoAsiento = 'disponible' | 'reservado' | 'vendido';
@@ -22,6 +22,13 @@ interface Asiento {
   seccion: string;
   estado: EstadoAsiento;
   precio: number;
+}
+
+interface StadiumLayoutProps {
+  isAdmin: boolean;
+  onSeatStatusChange: (seatId: string, status: string) => void;
+  onSeatDelete: (seatId: string) => void;
+  onSeatPriceChange: (seatId: string, price: number) => void;
 }
 
 // Sections Configuration
@@ -210,14 +217,22 @@ const SeccionLateral = ({
   );
 };
 
-// Componente Principal
-const StadiumLayout: React.FC = () => {
+const StadiumLayout: React.FC<StadiumLayoutProps> = ({
+  isAdmin,
+  onSeatStatusChange,
+  //onSeatDelete,
+  //onSeatPriceChange
+}) => {
   const [asientos, setAsientos] = useState<Asiento[]>(generarAsientos());
   const [asientosSeleccionados, setAsientosSeleccionados] = useState<Asiento[]>([]);
   const [mostrarMensajeExito, setMostrarMensajeExito] = useState(false);
-  const [mostrarAdminView, setMostrarAdminView] = useState(false); // Estado para controlar la vista de Admin
+  const [mostrarAdminView, setMostrarAdminView] = useState(false);
 
   const manejarSeleccionAsiento = (asiento: Asiento) => {
+    if (isAdmin) {
+      onSeatStatusChange(asiento.id, asiento.estado);
+    }
+
     if (asientosSeleccionados.find(a => a.id === asiento.id)) {
       setAsientosSeleccionados(asientosSeleccionados.filter(a => a.id !== asiento.id));
     } else {
@@ -228,7 +243,11 @@ const StadiumLayout: React.FC = () => {
   const manejarReserva = () => {
     const asientosActualizados = asientos.map(asiento => {
       if (asientosSeleccionados.find(a => a.id === asiento.id)) {
-        return { ...asiento, estado: 'reservado' as EstadoAsiento };
+        const nuevoEstado: EstadoAsiento = 'reservado';
+        if (isAdmin) {
+          onSeatStatusChange(asiento.id, nuevoEstado);
+        }
+        return { ...asiento, estado: nuevoEstado };
       }
       return asiento;
     });
@@ -249,24 +268,23 @@ const StadiumLayout: React.FC = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-2 md:p-4 bg-transparent min-h-screen">
-      {/* Contenedor para el botón de Admin */}
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={() => setMostrarAdminView(!mostrarAdminView)}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
-        >
-          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
-            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" />
-          </svg>
-          {mostrarAdminView ? 'Ocultar Vista de Administración' : 'Mostrar Vista de Administración'}
-        </button>
-      </div>
+      {isAdmin && (
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => setMostrarAdminView(!mostrarAdminView)}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          >
+            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+              <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" />
+            </svg>
+            {mostrarAdminView ? 'Ocultar Vista de Administración' : 'Mostrar Vista de Administración'}
+          </button>
+        </div>
+      )}
 
-      {/* Mostrar AdminView si el estado es verdadero */}
-      {mostrarAdminView && <AdminView />}
+      {mostrarAdminView && isAdmin && <AdminView />}
 
-      {/* Escenario */}
       <div className="w-full max-w-4xl mx-auto mb-4 md:mb-8">
         <div className="bg-amber-500 h-12 md:h-20 rounded-t-full relative flex items-start justify-center">
           <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 
@@ -276,10 +294,8 @@ const StadiumLayout: React.FC = () => {
         </div>
       </div>
     
-      {/* Layout del Concierto */}
       <div className="w-full max-w-6xl mx-auto bg-transparent rounded-lg p-4 md:p-8 relative">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 md:gap-8">
-          {/* Platinum Izquierda */}
           <div className="md:order-1">
             <h3 className="text-xs md:text-sm font-bold mb-2 text-center text-gray-200">PLATINUM IZQ</h3>
             <SeccionLateral 
@@ -289,7 +305,6 @@ const StadiumLayout: React.FC = () => {
             />
           </div>
     
-          {/* Secciones Principales */}
           <div className="space-y-4 md:space-y-8 flex-grow overflow-x-auto md:order-2">
             {SECCIONES.map((seccion) => (
               <div key={seccion.id} className="relative">
@@ -303,7 +318,6 @@ const StadiumLayout: React.FC = () => {
             ))}
           </div>
     
-          {/* Platinum Derecha */}
           <div className="md:order-3">
             <h3 className="text-xs md:text-sm font-bold mb-2 text-center text-gray-200">PLATINUM DER</h3>
             <SeccionLateral 
