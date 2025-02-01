@@ -1,6 +1,5 @@
 import { SideNav } from "./side-nav"
 import { TopBar } from "./top-bar"
-import {Toaster} from 'sonner'
 const navigationItems = [
   {
     label: 'Inicio',

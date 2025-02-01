@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Music2, Film, Plane, Upload, Plus, Minus, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -42,7 +42,7 @@ const CreateEventForm: React.FC = () => {
     const [formData, setFormData] = useState<EventFormData>(initialFormData)
     const [step, setStep] = useState<number>(1)
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [errors, setErrors] = useState<Partial<EventFormData>>({})
+    const [ setErrors] = useState<Partial<EventFormData>>({})
     const totalSteps = 3
 
     const validateStep = (currentStep: number): boolean => {
@@ -140,9 +140,7 @@ const CreateEventForm: React.FC = () => {
 
             toast.success("Evento creado exitosamente")
             router.push('/admin/eventos')
-        } catch (error) {
-            toast.error("Error al crear el evento")
-        } finally {
+        }finally {
             setIsSubmitting(false)
         }
     }

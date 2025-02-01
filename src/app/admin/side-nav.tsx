@@ -34,7 +34,7 @@ const iconMap: Record<string, JSX.Element> = {
   "Cerrar sesión": <LogOut className="h-5 w-5 bg-gradient-to-r from-purple-600 to-blue-800 text-white p-1 rounded-full" />
 }
 
-export function SideNav({ className = "", items }: { className?: string; items: NavGroup[] }) {
+export function SideNav({ items }: { className?: string; items: NavGroup[] }) {
   const pathname = usePathname()
   const [openSections, setOpenSections] = useState<string[]>([])
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)

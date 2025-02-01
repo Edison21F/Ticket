@@ -57,7 +57,7 @@ function AddUserForm({ onSubmit }: { onSubmit: (newUser: Omit<Usuario, "id" | "f
       {/* Input de archivo */}
       <Input type="file" accept="image/*" onChange={handleFileChange} className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400" />
 
-      <Select value={estado} onValueChange={(value: any) => setEstado(value)}>
+      <Select value={estado} onValueChange={(value: "Activo" | "Inactivo") => setEstado(value)}>
         <SelectTrigger className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400"><SelectValue placeholder="Estado" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="Activo">Activo</SelectItem>
@@ -80,7 +80,7 @@ function AddUserForm({ onSubmit }: { onSubmit: (newUser: Omit<Usuario, "id" | "f
 
 
 
-function EditUserForm({ user, onSave, onCancel }: { user: Usuario; onSave: (data: any) => void; onCancel: () => void }) {
+function EditUserForm({ user, onSave, onCancel }: { user: Usuario; onSave: (data: FormData) => void; onCancel: () => void }) {
   const [nombre, setNombre] = useState(user.nombre)
   const [email, setEmail] = useState(user.email)
   const [estado, setEstado] = useState(user.estado)
@@ -142,7 +142,7 @@ function EditUserForm({ user, onSave, onCancel }: { user: Usuario; onSave: (data
         {imagen && <img src={imagen} alt="Vista previa" className="mt-2 h-24 w-24 object-cover rounded-lg" />}
       </div>
 
-      <Select value={estado} onValueChange={(value: any) => setEstado(value)}>
+      <Select value={estado} onValueChange={(value: "Activo" | "Inactivo") => setEstado(value)}>
         <SelectTrigger className="w-full bg-gray-900/50 border-gray-700 text-white">
           <SelectValue placeholder="Estado" />
         </SelectTrigger>
@@ -203,7 +203,6 @@ export default function UserManagement() {
   ])
 
   const [editingUser, setEditingUser] = useState<Usuario | null>(null)
-  const [selectedUser, setSelectedUser] = useState<string | null>(null)
   const [sortField, setSortField] = useState<keyof Usuario>("nombre")
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
   const [isLoading, setIsLoading] = useState(true)
@@ -289,7 +288,7 @@ export default function UserManagement() {
                 className="pl-10 w-64 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400"
               />
             </div>
-            <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
+            <Select value={filterStatus} onValueChange={(value: "Activo" | "Inactivo") => setFilterStatus(value)}>
               <SelectTrigger className="w-40 bg-gray-900/50 border-gray-700 text-white">
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Filtrar por estado" />

@@ -56,7 +56,7 @@ const PaymentManagement = () => {
   const [isEditingPaymentMethods, setIsEditingPaymentMethods] = useState(false);
 
   // Datos de ejemplo para la tabla
-  const [payments, setPayments] = useState<PaymentRecord[]>([
+  const [payments] = useState<PaymentRecord[]>([
     { id: '196', serviceName: 'Bus - Cooperativa Transplaneta', ticketCount: 196, amount: 365.85, status: 'Cancelado' },
     { id: '883', serviceName: 'Cine - Avengers: Endgame', ticketCount: 883, amount: 310.75, status: 'En progreso' },
     { id: '357', serviceName: 'Concierto - Coldplay', ticketCount: 357, amount: 410.40, status: 'Finalizado' },

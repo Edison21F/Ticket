@@ -1,7 +1,7 @@
 'use client';
 import React, { useState} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit, Trash2, ChevronDown, MapPin, Clock, Users, X } from 'lucide-react';
+import { Plus, Edit, Trash2, ChevronDown, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
