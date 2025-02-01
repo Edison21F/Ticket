@@ -65,8 +65,7 @@ export function SideNav({ className = "", items }: { className?: string; items: 
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 w-64 bg-[#1D1E2C] bg-opacity-90 transition-transform duration-200 ease-in-out transform z-50",
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+"fixed inset-y-0 left-0 w-64 bg-[#1D1E2C]/90 backdrop-blur-lg border border-white/20 shadow-xl shadow-white/10 transition-transform duration-300 ease-in-out transform z-50",          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
           "md:translate-x-0 md:relative md:bg-opacity-100"
         )}
       >

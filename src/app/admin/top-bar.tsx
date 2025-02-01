@@ -11,7 +11,7 @@ const fadeIn = {
 
 const welcomeMessages = [
   "¡Bienvenido a EvenTix!", 
-  "Gestiona tus eventos con estilo", 
+  "Gestiona tus eventos", 
   "Crea experiencias inolvidables"
 ]
 
@@ -37,7 +37,8 @@ export function TopBar() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="absolute text-3xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent text-center"
+              className="absolute text-center font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent 
+              text-l sm:text-2xl md:text-3xl lg:text-4xl max-w-[100%] md:max-w-[100%]"
             >
               {welcomeMessages[welcomeIndex]}
             </motion.h1>

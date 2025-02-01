@@ -160,8 +160,7 @@ const RolesManager: React.FC = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setShowNewRoleForm(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-            >
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition-colors flex items-center gap-2"            >
               <Plus className="w-4 h-4" />
               Nuevo Rol
             </button>

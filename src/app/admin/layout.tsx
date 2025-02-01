@@ -51,18 +51,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-      <div className="bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900  ">
+      <body className="bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900  max-w mx-auto ">
         <div  className="flex min-h-screen">
-        <Toaster position="top-right" />
-          <SideNav items={navigationItems} />
+        
+
+          <SideNav items={navigationItems}/>
           
           <div className="flex-1">
             <TopBar />
             
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 p-3">{children}</main>
           </div>
         </div>
-      </div>
+      </body>
   
   )
 }
