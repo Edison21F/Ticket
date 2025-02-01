@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast, Toaster } from "react-hot-toast"
+import Image from "next/image"
 
 interface Usuario {
   id: string
@@ -52,7 +53,7 @@ function AddUserForm({ onSubmit }: { onSubmit: (newUser: Omit<Usuario, "id" | "f
       <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400"/>
 
       {/* Vista previa de imagen */}
-      {preview && <img src={preview} alt="Vista previa" className="w-32 h-32 object-cover rounded-md mx-auto" />}
+      {preview && <Image src={preview} alt="Vista previa" className="w-32 h-32 object-cover rounded-md mx-auto" />}
 
       {/* Input de archivo */}
       <Input type="file" accept="image/*" onChange={handleFileChange} className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400" />
@@ -139,7 +140,7 @@ function EditUserForm({ user, onSave, onCancel }: { user: Usuario; onSave: (data
       <div>
         <label className="text-white">Imagen</label>
         <input type="file" accept="image/*" onChange={handleImageChange} className="w-full text-white mt-2" />
-        {imagen && <img src={imagen} alt="Vista previa" className="mt-2 h-24 w-24 object-cover rounded-lg" />}
+        {imagen && <Image src={imagen} alt="Vista previa" className="mt-2 h-24 w-24 object-cover rounded-lg" />}
       </div>
 
       <Select value={estado} onValueChange={(value: "Activo" | "Inactivo") => setEstado(value)}>

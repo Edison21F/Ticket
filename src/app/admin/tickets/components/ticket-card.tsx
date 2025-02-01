@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import type { Ticket } from "../utils/mock-tickets"
+import Image from "next/image";
+
 
 interface TicketCardProps {
   ticket: Ticket
@@ -61,7 +63,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
           } flex h-48 transition-opacity duration-300 relative`}
         >
           <div className={`w-1/3 ${getTicketColor()} p-4 flex items-center justify-center`}>
-            <img
+            <Image
               src={customImage || ticket.image || "/placeholder.svg?height=200&width=200"}
               alt={ticket.eventName}
               className="w-full h-full object-cover rounded-lg shadow-lg"

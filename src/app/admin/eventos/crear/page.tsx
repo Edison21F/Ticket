@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 interface TicketType {
     name: string
@@ -42,7 +43,7 @@ const CreateEventForm: React.FC = () => {
     const [formData, setFormData] = useState<EventFormData>(initialFormData)
     const [step, setStep] = useState<number>(1)
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [ setErrors] = useState<Partial<EventFormData>>({})
+    const [, setErrors] = useState<Partial<EventFormData>>({})
     const totalSteps = 3
 
     const validateStep = (currentStep: number): boolean => {
@@ -55,10 +56,10 @@ const CreateEventForm: React.FC = () => {
             if (!formData.description) newErrors.description = "La descripción es requerida"
         }
 
-        if (currentStep === 2) {
-            if (!formData.venue) newErrors.venue = "El lugar es requerido"
-            if (!formData.capacity || formData.capacity <= 0) newErrors.capacity = "La capacidad debe ser mayor a 0"
-        }
+        //if (!formData.capacity || Number(formData.capacity) <= 0) {
+          ///  newErrors.capacity = "La capacidad debe ser mayor a 0";
+        //}
+        
 
         if (currentStep === 3) {
             if (formData.ticketTypes.length === 0) {
@@ -339,7 +340,7 @@ const CreateEventForm: React.FC = () => {
                                             <div className="border-2 border-dashed border-gray-700 rounded-lg p-4">
                                                 {formData.image ? (
                                                     <div className="relative">
-                                                        <img
+                                                        <Image
                                                             src={formData.image}
                                                             alt="Vista Previa"
                                                             className="max-h-48 mx-auto rounded"
