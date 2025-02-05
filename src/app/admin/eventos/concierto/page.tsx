@@ -13,7 +13,7 @@ export default function ConcertPage() {
 
   const handleSeatPriceChange = (seatId: string, price: number) => {
     console.log('Seat price changed:', seatId, price);
-  };
+  }; 
 
   return (
     <div className="container mx-auto py-8">

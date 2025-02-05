@@ -17,10 +17,10 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 // Definir tipos para nuestros datos
 interface PaymentRecord {
   id: string;
-  serviceName: string;
-  ticketCount: number;
-  amount: number;
-  status: 'Cancelado' | 'En progreso' | 'Finalizado' | 'Reembolso';
+  _serviceName: string;
+  _ticketCount: number;
+  _amount: number;
+  _status: 'Cancelado' | 'En progreso' | 'Finalizado' | 'Reembolso';
 }
 
 interface PaymentMethod {
@@ -40,7 +40,7 @@ const PaymentManagement = () => {
 
   // Estados para búsqueda y filtrado
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
+  const [filter_Status, setFilter_Status] = useState('');
 
   // Estado para métodos de pago
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
@@ -57,23 +57,23 @@ const PaymentManagement = () => {
 
   // Datos de ejemplo para la tabla
   const [payments] = useState<PaymentRecord[]>([
-    { id: '196', serviceName: 'Bus - Cooperativa Transplaneta', ticketCount: 196, amount: 365.85, status: 'Cancelado' },
-    { id: '883', serviceName: 'Cine - Avengers: Endgame', ticketCount: 883, amount: 310.75, status: 'En progreso' },
-    { id: '357', serviceName: 'Concierto - Coldplay', ticketCount: 357, amount: 410.40, status: 'Finalizado' },
-    { id: '459', serviceName: 'Cine - Spider-Man', ticketCount: 459, amount: 420.00, status: 'Reembolso' },
-    { id: '782', serviceName: 'Concierto - Metallica', ticketCount: 782, amount: 589.50, status: 'En progreso' },
-    { id: '102', serviceName: 'Cine - Avatar 2', ticketCount: 102, amount: 250.00, status: 'Finalizado' },
+    { id: '196', _serviceName: 'Bus - Cooperativa Transplaneta', _ticketCount: 196, _amount: 365.85, _status: 'Cancelado' },
+    { id: '883', _serviceName: 'Cine - Avengers: Endgame', _ticketCount: 883, _amount: 310.75, _status: 'En progreso' },
+    { id: '357', _serviceName: 'Concierto - Coldplay', _ticketCount: 357, _amount: 410.40, _status: 'Finalizado' },
+    { id: '459', _serviceName: 'Cine - Spider-Man', _ticketCount: 459, _amount: 420.00, _status: 'Reembolso' },
+    { id: '782', _serviceName: 'Concierto - Metallica', _ticketCount: 782, _amount: 589.50, _status: 'En progreso' },
+    { id: '102', _serviceName: 'Cine - Avatar 2', _ticketCount: 102, _amount: 250.00, _status: 'Finalizado' },
   ]);
 
   // Filtrar pagos según la búsqueda y el estado
   const filteredPayments = payments.filter(payment =>
-    payment.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (filterStatus ? payment.status === filterStatus : true)
+    payment._serviceName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (filter_Status ? payment._status === filter_Status : true)
   );
 
   // Función de ayuda para obtener el color del estado
-  const getStatusColor = (status: string) => {
-    switch (status) {
+  const get_StatusColor = (_status: string) => {
+    switch (_status) {
       case 'Cancelado': return 'bg-red-500';
       case 'En progreso': return 'bg-yellow-500';
       case 'Finalizado': return 'bg-green-500';
@@ -84,7 +84,7 @@ const PaymentManagement = () => {
 
   // Funciones para manejar alertas
   const handleAction = (action: string, payment: PaymentRecord) => {
-    setShowAlert(`${action} seleccionado para ${payment.serviceName}`);
+    setShowAlert(`${action} seleccionado para ${payment._serviceName}`);
     setTimeout(() => {
       setShowAlert(null);
     }, 3000);
@@ -170,10 +170,10 @@ const PaymentManagement = () => {
               >
                 <X className="w-6 h-6" />
               </button>
-              <h2 className="text-2xl font-bold text-white mb-4">{showDetails.serviceName}</h2>
-              <p className="text-white mb-2">Cantidad de Tickets: {showDetails.ticketCount}</p>
-              <p className="text-white mb-2">Recaudación: ${showDetails.amount.toFixed(2)}</p>
-              <p className="text-white">Estado: {showDetails.status}</p>
+              <h2 className="text-2xl font-bold text-white mb-4">{showDetails._serviceName}</h2>
+              <p className="text-white mb-2">Cantidad de Tickets: {showDetails._ticketCount}</p>
+              <p className="text-white mb-2">Recaudación: ${showDetails._amount.toFixed(2)}</p>
+              <p className="text-white">Estado: {showDetails._status}</p>
             </motion.div>
           </motion.div>
         )}
@@ -303,8 +303,8 @@ const PaymentManagement = () => {
                   className="px-4 py-2 rounded-md bg-gray-700 text-white w-full md:w-1/2"
                 />
                 <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
+                  value={filter_Status}
+                  onChange={(e) => setFilter_Status(e.target.value)}
                   className="px-4 py-2 rounded-md bg-gray-700 text-white w-full md:w-1/4"
                 >
                   <option value="">Todos los estados</option>
@@ -329,12 +329,12 @@ const PaymentManagement = () => {
                 <tbody className="divide-y divide-gray-700">
                   {filteredPayments.map((payment) => (
                     <tr key={payment.id} className="hover:bg-gray-700 transition-colors duration-200">
-                      <td className="px-6 py-4 text-sm text-white">{payment.serviceName}</td>
-                      <td className="px-6 py-4 text-sm text-white">{payment.ticketCount}</td>
-                      <td className="px-6 py-4 text-sm text-white">${payment.amount.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-sm text-white">{payment._serviceName}</td>
+                      <td className="px-6 py-4 text-sm text-white">{payment._ticketCount}</td>
+                      <td className="px-6 py-4 text-sm text-white">${payment._amount.toFixed(2)}</td>
                       <td className="px-6 py-4 text-sm">
-                        <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(payment.status)} text-white`} style={{ whiteSpace: 'nowrap' }}>
-                          {payment.status}
+                        <span className={`px-3 py-1 rounded-full text-xs ${get_StatusColor(payment._status)} text-white`} style={{ whiteSpace: 'nowrap' }}>
+                          {payment._status}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm space-y-2">

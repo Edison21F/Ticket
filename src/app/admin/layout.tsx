@@ -19,7 +19,7 @@ const navigationItems = [
     items: [
       { label: 'Listado de Eventos', icon: 'pi pi-fw pi-list', routerLink: ['/admin/eventos'] },
       { label: 'Conciertos', icon: 'pi pi-id-card', routerLink: ['/admin/eventos/concierto'] },
-      { label: 'Cine', icon: 'pi pi-discord', routerLink: ['/admin/eventos/cine'] },
+      { label: 'Cine', icon: 'pi pi-discord', routerLink: ['http://localhost:3000/auth'] },
       { label: 'Transporte', icon: 'pi pi-car', routerLink: ['/admin/eventos/transporte'] },
       { label: 'Otros', icon: 'pi pi-microsoft', routerLink: ['/admin/eventos/varios'] }
     ]
@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-      <body className="bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900  max-w mx-auto ">
+      <div className="bg-gradient-to-br from-purple-900 via-[#1c1c25] to-blue-900  max-w mx-auto ">
         <div  className="flex min-h-screen">
         
 
@@ -62,7 +62,7 @@ export default function RootLayout({
             <main className="flex-1 p-3">{children}</main>
           </div>
         </div>
-      </body>
+      </div>
   
   )
 }
