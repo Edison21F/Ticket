@@ -58,16 +58,18 @@ export function TicketCard({ ticket }: TicketCardProps) {
       >
         {/* Front of the ticket */}
         <div
-          className={`${
-            isFlipped ? "opacity-0" : "opacity-100"
-          } flex h-48 transition-opacity duration-300 relative`}
+          className={`${isFlipped ? "opacity-0" : "opacity-100"
+            } flex h-48 transition-opacity duration-300 relative`}
         >
           <div className={`w-1/3 ${getTicketColor()} p-4 flex items-center justify-center`}>
             <Image
-              src={customImage || ticket.image || "/placeholder.svg?height=200&width=200"}
+              src={customImage || ticket.image || "/placeholder.svg"}
               alt={ticket.eventName}
+              width={200} // Define un ancho específico
+              height={200} // Define una altura específica
               className="w-full h-full object-cover rounded-lg shadow-lg"
             />
+
           </div>
           <div className="w-2/3 p-4 flex flex-col justify-between">
             <div>
@@ -100,9 +102,8 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
         {/* Back of the ticket */}
         <div
-          className={`${
-            isFlipped ? "opacity-100" : "opacity-0"
-          } absolute inset-0 bg-gray-800 bg-opacity-90 p-4 transition-opacity duration-300 flex flex-col justify-between`}
+          className={`${isFlipped ? "opacity-100" : "opacity-0"
+            } absolute inset-0 bg-gray-800 bg-opacity-90 p-4 transition-opacity duration-300 flex flex-col justify-between`}
           style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
         >
           <div>
