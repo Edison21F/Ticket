@@ -19,7 +19,7 @@ const navigationItems = [
     items: [
       { label: 'Listado de Eventos', icon: 'pi pi-fw pi-list', routerLink: ['/admin/eventos'] },
       { label: 'Conciertos', icon: 'pi pi-id-card', routerLink: ['/admin/eventos/concierto'] },
-      { label: 'Cine', icon: 'pi pi-discord', routerLink: ['http://localhost:3000/auth'] },
+      { label: 'Cine', icon: 'pi pi-discord', routerLink: ['https://ticket-cine-hazel.vercel.app/auth'] },
       { label: 'Transporte', icon: 'pi pi-car', routerLink: ['/admin/eventos/transporte'] },
       { label: 'Otros', icon: 'pi pi-microsoft', routerLink: ['/admin/eventos/varios'] }
     ]
