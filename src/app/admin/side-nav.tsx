@@ -112,37 +112,6 @@ export function SideNav({ items }: { className?: string; items: NavGroup[] }) {
     }
   }
 
-  const sectionVariants = {
-    open: {
-      height: "auto",
-      opacity: 1,
-      transition: {
-        height: {
-          type: "spring",
-          stiffness: 300,
-          damping: 30
-        },
-        opacity: {
-          duration: 0.2,
-          delay: 0.1
-        }
-      }
-    },
-    closed: {
-      height: 0,
-      opacity: 0,
-      transition: {
-        height: {
-          type: "spring",
-          stiffness: 300,
-          damping: 30
-        },
-        opacity: {
-          duration: 0.1
-        }
-      }
-    }
-  }
 
   return (
     <>

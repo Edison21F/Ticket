@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, ComponentType } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
@@ -74,7 +74,7 @@ const FloatingParticles = () => {
 
 // Componente de características
 const FeatureCard = ({ icon: Icon, title, description }: { 
-  icon: any, 
+  icon: ComponentType<{ className?: string }>,  
   title: string, 
   description: string 
 }) => (

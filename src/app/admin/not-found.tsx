@@ -180,28 +180,6 @@ export default function NotFound() {
           </motion.div>
         </motion.div>
 
-        {/* Enlaces útiles */}
-        <motion.div
-          className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto"
-          variants={itemVariants}
-        >
-          {[
-            { href: "/admin/eventos", label: "Eventos", icon: "🎭" },
-            { href: "/admin/usuarios", label: "Usuarios", icon: "👥" },
-            { href: "/admin/tickets", label: "Tickets", icon: "🎫" },
-          ].map((link, index) => (
-            <motion.div
-              key={link.href}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="p-4 rounded-lg bg-gray-800/30 backdrop-blur-xl border border-gray-700/50 hover:border-purple-500/30 transition-colors"
-            >
-              <Link href={link.href} className="block text-center">
-                <div className="text-2xl mb-2">{link.icon}</div>
-                <div className="text-white font-medium">{link.label}</div>
-              </Link>
-            </motion.div>
-          ))}
-        </motion.div>
 
         {/* Mensaje de ayuda */}
         <motion.div

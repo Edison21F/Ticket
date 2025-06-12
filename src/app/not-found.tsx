@@ -2,14 +2,11 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Home, Search, ArrowLeft, AlertTriangle } from "lucide-react"
+import { Home, ArrowLeft, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { useState } from "react"
 
 export default function NotFound() {
-  const [searchQuery, setSearchQuery] = useState("")
 
   const containerVariants = {
     hidden: { opacity: 0 },
