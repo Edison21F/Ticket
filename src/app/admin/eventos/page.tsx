@@ -173,16 +173,6 @@ const FeaturedEvent: React.FC = () => {
   );
 };
 
-const ServiceCard: React.FC<{ icon: React.ElementType; title: string; description: string }> = ({ icon: Icon, title, description }) => (
-  <motion.div
-    whileHover={{ y: -10, scale: 1.02 }}
-    className="p-8 bg-gray-800/80 rounded-xl backdrop-blur-sm"
-  >
-    <Icon className="w-10 h-10 text-blue-400 mb-4" />
-    <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-    <p className="text-gray-300">{description}</p>
-  </motion.div>
-);
 
 const Eventos: React.FC = () => {
   const [newEvent, setNewEvent] = useState<string>('');
