@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
-import { Search, Edit2, Trash2, UserPlus, Filter, MoreVertical, ChevronUp, ChevronDown } from "lucide-react"
+import { Search, Edit2, Trash2, UserPlus, Filter, MoreVertical, ChevronUp, ChevronDown, Calendar, CheckCircle, Clock, Mail, Shield, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -50,7 +50,7 @@ function AddUserForm({ onSubmit }: { onSubmit: (newUser: Omit<Usuario, "id" | "f
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400" />
-      <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400"/>
+      <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400" />
 
       {/* Vista previa de imagen */}
       {preview && <Image src={preview} alt="Vista previa" className="w-32 h-32 object-cover rounded-md mx-auto" />}
@@ -268,7 +268,7 @@ export default function UserManagement() {
         transition={{ duration: 0.5 }}
         className="max-w mx-auto"
       >
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
 
           <motion.h1
             className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"
@@ -330,83 +330,107 @@ export default function UserManagement() {
                 </motion.div>
               ) : (
                 sortedAndFilteredUsers.map((usuario) => (
-                  <motion.div
+                  <motion.div       //Diseñado de carta
                     key={usuario.id}
                     layout
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
-                    className="relative bg-gray-900/50 backdrop-blur-xl rounded-xl overflow-hidden border border-gray-700/50 transition-all duration-300"
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0 10px 25px rgba(159, 122, 234, 0.3)"
+                    }}
+                    className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden border border-gray-700/50 transition-all duration-300 group"
                   >
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-blue-500/10"
-                      animate={{
-                        opacity: [0.5, 0.8, 0.5],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear",
-                      }}
-                    />
+                    {/* Borde lateral decorativo */}
+                    <div className={`absolute left-0 top-0 bottom-0 w-1 ${usuario.rol === "Administrador" ? "bg-gradient-to-b from-cyan-500 to-purple-500" : "bg-gradient-to-b from-purple-500 to-blue-500"}`} />
 
-                    <div className="relative p-6">
-                      <div className="flex justify-between items-start mb-4">
+                    <div className="relative p-6 z-10 flex flex-col md:flex-row gap-6 items-start">
+                      {/* Foto a la derecha (versión móvil la muestra arriba) */}
+                      <div className="order-2 md:order-1 flex-1 w-full">
+                        {/* Contenido textual */}
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h2 className="text-2xl font-bold text-white mb-1">
+                                {usuario.nombre}
+                              </h2>
+                              <p className="text-purple-300 flex items-center gap-2">
+                                <Mail className="h-4 w-4" />
+                                {usuario.email}
+                              </p>
+                            </div>
+
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="text-gray-400 hover:text-white bg-gray-800/50 hover:bg-purple-500/20 transition-all"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-gray-800 border-gray-700 backdrop-blur-lg">
+                                <DropdownMenuItem
+                                  onClick={() => handleEdit(usuario)}
+                                  className="text-white hover:bg-gray-700/50 focus:bg-gray-700/50"
+                                >
+                                  <Edit2 className="mr-2 h-4 w-4 text-cyan-400" /> Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => handleDelete(usuario.id)}
+                                  className="text-red-400 hover:bg-gray-700/50 focus:bg-gray-700/50"
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" /> Eliminar
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+
+                          <div className="flex flex-wrap gap-3">
+                            <motion.span
+                              className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 ${usuario.estado === "Activo"
+                                ? "bg-cyan-500/20 text-cyan-400"
+                                : "bg-purple-500/20 text-purple-400"
+                                }`}
+                              whileHover={{ scale: 1.05 }}
+                            >
+                              {usuario.estado === "Activo" ? <CheckCircle className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+                              {usuario.estado}
+                            </motion.span>
+
+                            <span className="px-3 py-1 rounded-full bg-gray-700/50 text-gray-300 text-sm font-medium flex items-center gap-1">
+                              {usuario.rol === "Administrador" ? <Shield className="h-4 w-4 text-cyan-400" /> : <User className="h-4 w-4 text-purple-400" />}
+                              {usuario.rol}
+                            </span>
+
+                            <span className="px-3 py-1 rounded-full bg-gray-700/50 text-gray-300 text-sm font-medium flex items-center gap-1">
+                              <Calendar className="h-4 w-4 text-blue-400" />
+                              {usuario.fechaRegistro}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Foto a la izquierda (derecha en móvil) */}
+                      <div className="order-1 md:order-2 relative group">
                         <motion.img
                           src={usuario.imagen || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"}
                           alt={usuario.nombre}
-                          className="w-20 h-20 rounded-full object-cover ring-2 ring-purple-500/50"
-                          whileHover={{ scale: 1.1 }}
+                          className="w-24 h-24 md:w-28 md:h-28 rounded-xl object-cover border-2 border-gray-700 group-hover:border-purple-500/60 transition-all duration-300 shadow-lg"
+                          whileHover={{ scale: 1.05 }}
                           transition={{ type: "spring", stiffness: 300 }}
                         />
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-gray-900 border-gray-700">
-                            <DropdownMenuItem
-                              onClick={() => handleEdit(usuario)}
-                              className="text-white hover:bg-gray-800"
-                            >
-                              <Edit2 className="mr-2 h-4 w-4" /> Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(usuario.id)}
-                              className="text-red-400 hover:bg-gray-800"
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" /> Eliminar
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h2 className="text-xl font-semibold text-white">{usuario.nombre}</h2>
-                        <p className="text-gray-400">{usuario.email}</p>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">{usuario.fechaRegistro}</span>
-                          <motion.span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${usuario.estado === "Activo"
-                              ? "bg-cyan-500/20 text-cyan-400"
-                              : "bg-purple-500/20 text-purple-400"
-                              }`}
-                            whileHover={{ scale: 1.1 }}
-                          >
-                            {usuario.estado}
-                          </motion.span>
-                        </div>
-                        <div className="mt-4 flex items-center gap-2">
-                          <div
-                            className={`w-2 h-2 rounded-full ${usuario.rol === "Administrador" ? "bg-cyan-400" : "bg-purple-400"
-                              }`}
-                          />
-                          <span className="text-gray-400 text-sm">{usuario.rol}</span>
-                        </div>
+                        {/* Efecto de destello al hacer hover */}
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-transparent via-transparent to-transparent group-hover:via-purple-500/10 group-hover:to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                       </div>
                     </div>
+
+                    {/* Efecto de gradiente animado en el fondo */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    />
                   </motion.div>
                 ))
               )}

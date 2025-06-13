@@ -86,13 +86,13 @@ const SECCIONES_LATERALES = [
 // Seat Generation Function
 const generarAsientos = () => {
   const asientos: Asiento[] = [];
-  
+
   SECCIONES.forEach(seccion => {
     const letrasFilas = Array.from(
       { length: seccion.filaFin.charCodeAt(0) - seccion.filaInicio.charCodeAt(0) + 1 },
       (_, i) => String.fromCharCode(seccion.filaInicio.charCodeAt(0) + i)
     );
-    
+
     letrasFilas.forEach((fila, indiceFila) => {
       const numAsientos = seccion.asientosPorFila[indiceFila] || seccion.asientosPorFila[0];
       for (let numAsiento = 1; numAsiento <= numAsientos; numAsiento++) {
@@ -127,23 +127,23 @@ const generarAsientos = () => {
 };
 
 // Componentes de Sección
-const SeccionPrincipal = ({ 
-  seccion, 
+const SeccionPrincipal = ({
+  seccion,
   asientos,
   onSeleccionarAsiento
-}: { 
-  seccion: Seccion, 
+}: {
+  seccion: Seccion,
   asientos: Asiento[],
   onSeleccionarAsiento: (asiento: Asiento) => void
 }) => {
   const asientosSeccion = asientos.filter(asiento => asiento.seccion === seccion.id);
-  
+
   return (
     <div className="flex flex-col gap-0.5 overflow-x-auto">
       {Array.from({ length: seccion.filaFin.charCodeAt(0) - seccion.filaInicio.charCodeAt(0) + 1 }).map((_, indiceFila) => {
         const letraFila = String.fromCharCode(seccion.filaInicio.charCodeAt(0) + indiceFila);
         const asientosFila = asientosSeccion.filter(asiento => asiento.fila === letraFila);
-        
+
         return (
           <div key={letraFila} className="flex gap-0.5 justify-center items-center text-xs min-w-max px-4">
             <span className="w-6 text-right pr-2 text-gray-500 font-medium">{letraFila}</span>
@@ -152,13 +152,12 @@ const SeccionPrincipal = ({
                 key={asiento.id}
                 onClick={() => asiento.estado === 'disponible' && onSeleccionarAsiento(asiento)}
                 className={`w-4 h-4 md:w-5 md:h-5 flex items-center justify-center text-[8px] md:text-[10px] font-medium
-                  rounded transition-all duration-200 ${
-                  asiento.estado === 'disponible' 
-                    ? 'bg-green-400 hover:bg-green-500 text-white' 
-                    : asiento.estado === 'reservado' 
-                    ? 'bg-yellow-400 text-white cursor-not-allowed' 
-                    : 'bg-red-400 text-white cursor-not-allowed'
-                }`}
+                  rounded transition-all duration-200 ${asiento.estado === 'disponible'
+                    ? 'bg-green-400 hover:bg-green-500 text-white'
+                    : asiento.estado === 'reservado'
+                      ? 'bg-yellow-400 text-white cursor-not-allowed'
+                      : 'bg-red-400 text-white cursor-not-allowed'
+                  }`}
                 title={`${asiento.fila}${asiento.numero} - $${asiento.precio}`}
               >
                 {asiento.numero}
@@ -182,32 +181,39 @@ const SeccionLateral = ({
   onSeleccionarAsiento: (asiento: Asiento) => void
 }) => {
   const asientosSeccion = asientos.filter(asiento => asiento.seccion === seccion.id);
-  
+
   return (
     <div className="flex flex-col gap-1">
       {Array.from({ length: seccion.filas }).map((_, indiceFila) => (
-        <div key={indiceFila} className="flex gap-1">
+        <div key={indiceFila} className="flex gap-1 justify-center">
           {Array.from({ length: seccion.numeroFin - seccion.numeroInicio + 1 }).map((_, indiceAsiento) => {
             const asiento = asientosSeccion.find(
               a => a.fila === (indiceFila + 1).toString() && a.numero === indiceAsiento + seccion.numeroInicio
             );
             if (!asiento) return null;
-            
+
+            const colorBase =
+              asiento.estado === 'disponible'
+                ? 'bg-blue-500 border-blue-600'
+                : asiento.estado === 'reservado'
+                ? 'bg-yellow-400 border-yellow-500'
+                : 'bg-red-500 border-red-600';
+
+            const cursor =
+              asiento.estado === 'disponible' ? 'hover:bg-opacity-90' : 'cursor-not-allowed';
+
             return (
               <button
                 key={asiento.id}
                 onClick={() => asiento.estado === 'disponible' && onSeleccionarAsiento(asiento)}
-                className={`w-4 h-4 md:w-6 md:h-6 flex items-center justify-center text-[8px] md:text-[10px] font-medium
-                  rounded transition-all duration-200 ${
-                  asiento.estado === 'disponible' 
-                    ? 'bg-blue-400 hover:bg-blue-500 text-white' 
-                    : asiento.estado === 'reservado' 
-                    ? 'bg-yellow-400 text-white cursor-not-allowed' 
-                    : 'bg-red-400 text-white cursor-not-allowed'
-                }`}
+                className={`
+                  w-4 h-4 md:w-6 md:h-6 relative flex items-center justify-center text-[8px] md:text-[10px]
+                  font-bold text-white rounded-t-full rounded-b-sm shadow-inner border ${colorBase} ${cursor}
+                `}
                 title={`Platinum ${asiento.fila}-${asiento.numero} - $${asiento.precio}`}
               >
                 {asiento.numero}
+                <div className="absolute bottom-0 w-full h-[2px] bg-black/50 rounded-b-sm" />
               </button>
             );
           })}
@@ -216,6 +222,7 @@ const SeccionLateral = ({
     </div>
   );
 };
+
 
 const StadiumLayout: React.FC<StadiumLayoutProps> = ({
   isAdmin,
@@ -251,7 +258,7 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
       }
       return asiento;
     });
-    
+
     setAsientos(asientosActualizados);
     setAsientosSeleccionados([]);
     setMostrarMensajeExito(true);
@@ -261,7 +268,7 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
   const obtenerNombreSeccion = (seccionId: string) => {
     const seccionPrincipal = SECCIONES.find(s => s.id === seccionId);
     if (seccionPrincipal) return seccionPrincipal.nombre;
-    
+
     const seccionLateral = SECCIONES_LATERALES.find(s => s.id === seccionId);
     return seccionLateral ? seccionLateral.nombre : seccionId;
   };
@@ -282,34 +289,35 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
           </button>
         </div>
       )}
-
       {mostrarAdminView && isAdmin && <AdminView />}
 
-      <div className="w-full max-w-4xl mx-auto mb-4 md:mb-8">
-        <div className="bg-amber-500 h-12 md:h-20 rounded-t-full relative flex items-start justify-center">
-          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 
-            bg-amber-600 text-black px-4 md:px-8 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold">
-            ESCENARIO
+      {/* Panel principal del escenario */}
+      <div className="w-full max-w-4xl mx-auto mb-6 md:mb-10">
+        <div className="relative flex items-start justify-center">
+          {/* Estructura del escenario */}
+          <div className="bg-gradient-to-br from-[#111827] via-[#1F2937] to-[#000000] h-16 md:h-24 w-full rounded-t-full border-t-4 border-indigo-600 shadow-[0_0_30px_rgba(99,102,241,0.4)]" />
+          <div className="absolute -top-4 md:-top-5 left-1/2 transform -translate-x-1/2 bg-indigo-500 text-white px-6 py-1.5 md:px-10 md:py-2 text-xs md:text-sm font-bold rounded-full shadow-md tracking-widest border border-white/20">
+            🎤 ESCENARIO 🎶
           </div>
         </div>
       </div>
-    
+
       <div className="w-full max-w-6xl mx-auto bg-transparent rounded-lg p-4 md:p-8 relative">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 md:gap-8">
           <div className="md:order-1">
             <h3 className="text-xs md:text-sm font-bold mb-2 text-center text-gray-200">PLATINUM IZQ</h3>
-            <SeccionLateral 
+            <SeccionLateral
               seccion={SECCIONES_LATERALES.find(s => s.id === 'platinum-izquierda')!}
               asientos={asientos}
               onSeleccionarAsiento={manejarSeleccionAsiento}
             />
           </div>
-    
+
           <div className="space-y-4 md:space-y-8 flex-grow overflow-x-auto md:order-2">
             {SECCIONES.map((seccion) => (
               <div key={seccion.id} className="relative">
                 <h3 className="text-xs md:text-sm font-bold mb-2 md:mb-4 text-center text-gray-200">{seccion.nombre}</h3>
-                <SeccionPrincipal 
+                <SeccionPrincipal
                   seccion={seccion}
                   asientos={asientos}
                   onSeleccionarAsiento={manejarSeleccionAsiento}
@@ -317,10 +325,10 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
               </div>
             ))}
           </div>
-    
+
           <div className="md:order-3">
             <h3 className="text-xs md:text-sm font-bold mb-2 text-center text-gray-200">PLATINUM DER</h3>
-            <SeccionLateral 
+            <SeccionLateral
               seccion={SECCIONES_LATERALES.find(s => s.id === 'platinum-derecha')!}
               asientos={asientos}
               onSeleccionarAsiento={manejarSeleccionAsiento}
@@ -328,7 +336,7 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
           </div>
         </div>
       </div>
-    
+
       {/* Panel de Asientos Seleccionados */}
       {asientosSeleccionados.length > 0 && (
         <div className="fixed bottom-4 right-4 bg-transparent rounded-lg shadow-2xl p-4 w-full max-w-xs md:w-80 border border-gray-700">
@@ -350,7 +358,7 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
                 <span>${asientosSeleccionados.reduce((sum, asiento) => sum + asiento.precio, 0)}</span>
               </div>
             </div>
-          </div> 
+          </div>
           <div className="flex gap-2">
             <button
               onClick={() => setAsientosSeleccionados([])}
@@ -369,7 +377,7 @@ const StadiumLayout: React.FC<StadiumLayoutProps> = ({
           </div>
         </div>
       )}
-  
+
       {/* Mensaje de Éxito con Detalles */}
       {mostrarMensajeExito && (
         <div className="fixed bottom-4 left-4 bg-transparent border-l-4 border-green-500 p-4 rounded shadow-lg 

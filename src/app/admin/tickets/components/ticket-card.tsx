@@ -50,55 +50,59 @@ export function TicketCard({ ticket }: TicketCardProps) {
       whileHover={{ scale: 1.02, boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.1)" }}
       onClick={() => setIsFlipped(!isFlipped)}
     >
-      <motion.div
-        className="relative bg-gray-900 bg-opacity-80 rounded-lg overflow-hidden shadow-lg backdrop-blur-lg border border-gray-700"
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.6 }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {/* Front of the ticket */}
-        <div
-          className={`${isFlipped ? "opacity-0" : "opacity-100"
-            } flex h-48 transition-opacity duration-300 relative`}
-        >
-          <div className={`w-1/3 ${getTicketColor()} p-4 flex items-center justify-center`}>
-            <Image
-              src={customImage || ticket.image || "/placeholder.svg"}
-              alt={ticket.eventName}
-              width={200} // Define un ancho específico
-              height={200} // Define una altura específica
-              className="w-full h-full object-cover rounded-lg shadow-lg"
-            />
+     <motion.div
+  className="bg-gray-900/80 rounded-lg border border-gray-700 overflow-hidden"
+  whileHover={{ scale: 1.02 }}
+>
+  {/* Frente del ticket */}
+  <div className="flex h-48">
+    {/* Sección de imagen con efecto de rompecabezas */}
+    <div className={`w-1/3 ${getTicketColor()} flex items-center justify-center p-2 relative`}>
+      {/* Muescas de rompecabezas */}
+      <div className="absolute -right-2 top-1/4 h-4 w-4 rounded-full bg-gray-900"></div>
+      <div className="absolute -right-2 top-1/2 h-4 w-4 rounded-full bg-gray-900 transform -translate-y-1/2"></div>
+      <div className="absolute -right-2 bottom-1/4 h-4 w-4 rounded-full bg-gray-900"></div>
+      
+      <Image 
+        src={customImage || ticket.image || "/placeholder.svg"}
+        alt={ticket.eventName}
+        width={160}
+        height={160}
+        className="rounded-md object-cover h-full"
+      />
+    </div>
 
+    {/* Contenido (igual que antes) */}
+    <div className="w-2/3 p-4 flex flex-col justify-between">
+      <div>
+        <h3 className="text-lg font-bold text-white mb-2">{ticket.eventName}</h3>
+        
+        <div className="space-y-2 text-sm">
+          <div className="flex items-center text-gray-300">
+            <Calendar className="w-4 h-4 mr-2 text-purple-400" />
+            {ticket.date}
           </div>
-          <div className="w-2/3 p-4 flex flex-col justify-between">
-            <div>
-              <h3 className="text-xl font-bold text-white mb-2">{ticket.eventName}</h3>
-              <div className="space-y-2">
-                <div className="flex items-center text-sm text-gray-300">
-                  <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                  {ticket.date}
-                </div>
-                <div className="flex items-center text-sm text-gray-300">
-                  <Clock className="w-4 h-4 mr-2 text-gray-400" />
-                  {ticket.time}
-                </div>
-                <div className="flex items-center text-sm text-gray-300">
-                  <MapPin className="w-4 h-4 mr-2 text-gray-400" />
-                  {ticket.location}
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="text-sm font-semibold text-gray-300">
-                {ticket.type === "cinema"
-                  ? `Sala ${ticket.seat.theater} • Fila ${ticket.seat.row} • Asiento ${ticket.seat.number}`
-                  : `Sección ${ticket.section} • Asiento ${ticket.seat.number}`}
-              </div>
-              <QrCode className="w-6 h-6 text-gray-400" />
-            </div>
+          <div className="flex items-center text-gray-300">
+            <Clock className="w-4 h-4 mr-2 text-cyan-400" />
+            {ticket.time}
+          </div>
+          <div className="flex items-center text-gray-300">
+            <MapPin className="w-4 h-4 mr-2 text-red-400" />
+            {ticket.location}
           </div>
         </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <span className="text-xs bg-gray-800 px-2 py-1 rounded">
+          {ticket.type === "cinema" 
+            ? `Sala ${ticket.seat.theater} - Asiento ${ticket.seat.number}`
+            : `Sección ${ticket.section}`}
+        </span>
+        <QrCode className="w-6 h-6 text-gray-400" />
+      </div>
+    </div>
+  </div>
 
         {/* Back of the ticket */}
         <div

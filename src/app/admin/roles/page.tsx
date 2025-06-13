@@ -41,11 +41,10 @@ interface RoleCardProps {
 const RoleCard: React.FC<RoleCardProps> = ({ role, isActive, onClick }) => (
   <div
     onClick={onClick}
-    className={`p-4 rounded-lg cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-      isActive
+    className={`p-4 rounded-lg cursor-pointer transition-all duration-300 transform hover:scale-105 ${isActive
         ? 'bg-white text-gray-900 shadow-lg'
         : 'bg-gray-800 text-white hover:bg-gray-700'
-    }`}
+      }`}
   >
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -89,7 +88,7 @@ const RolesManager: React.FC = () => {
   const [showNewRoleForm, setShowNewRoleForm] = useState(false);
   const [showAssignRole, setShowAssignRole] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-  const [searchUser , setSearchUser ] = useState('');
+  const [searchUser, setSearchUser] = useState('');
 
   const roles: Role[] = [
     { id: 1, name: 'Administrador', users: 3 },
@@ -160,7 +159,7 @@ const RolesManager: React.FC = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setShowNewRoleForm(true)}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition-colors flex items-center gap-2"            >
+              className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition-colors flex items-center gap-2"            >
               <Plus className="w-4 h-4" />
               Nuevo Rol
             </button>
@@ -273,8 +272,8 @@ const RolesManager: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Buscar usuario..."
-                  value={searchUser }
-                  onChange={(e) => setSearchUser (e.target.value)}
+                  value={searchUser}
+                  onChange={(e) => setSearchUser(e.target.value)}
                   className="w-full pl-10 p-3 bg-gray-700 rounded-lg text-white"
                 />
               </div>

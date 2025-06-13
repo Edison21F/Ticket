@@ -28,10 +28,12 @@ const RouteCard: React.FC<{
     animate={{ opacity: 1, scale: 1 }}
     exit={{ opacity: 0, scale: 0.95 }}
     whileHover={{ scale: 1.02 }}
-    className="bg-[#1D1E2C] border border-[#3A3B4C] rounded-lg p-4 hover:shadow-lg transition-all"
+    className="bg-gradient-to-br from-gray-800 via-gray-900 to-[#1A1B1F] border-l-4 border-[#E59D23] rounded-lg p-5 shadow-lg transition-all"
   >
-    <div className="flex items-center justify-between pb-3">
-      <h3 className="text-lg font-medium text-white">{route.name}</h3>
+    <div className="flex items-center justify-between pb-4 border-b border-gray-700">
+      <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+        🚌 {route.name}
+      </h3>
       <div className="flex gap-2">
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -49,34 +51,41 @@ const RouteCard: React.FC<{
         </motion.button>
       </div>
     </div>
-    
-    <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <div className="bg-[#E59D23]/10 text-[#E59D23] px-2 py-1 rounded text-sm">
-          {route.type}
+
+    <div className="pt-4 space-y-4">
+      <div className="flex items-center gap-3 text-sm">
+        <div className="bg-[#E59D23]/20 text-[#E59D23] font-medium px-3 py-1 rounded-full">
+          🛞 {route.type}
         </div>
-        <div className="bg-blue-500/10 text-blue-400 px-2 py-1 rounded text-sm">
-          {route.capacity} pasajeros
+        <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full">
+          🚻 {route.capacity} pasajeros
         </div>
       </div>
-      
-      <div className="grid gap-2 text-sm">
-        <div className="flex items-center gap-2 text-gray-400">
-          <Clock className="h-4 w-4" />
+
+      <div className="text-sm text-gray-300 space-y-2">
+        <div className="flex items-center gap-2">
+          <Clock className="h-4 w-4 text-[#E59D23]" />
           <span>{route.schedule}</span>
         </div>
-        <div className="flex items-center gap-2 text-gray-400">
-          <MapPin className="h-4 w-4" />
-          <div className="flex items-center gap-2">
-            <span className="text-white">{route.startPoint}</span>
-            <ChevronDown className="h-3 w-3 rotate-[-90deg]" />
-            <span className="text-white">{route.endPoint}</span>
-          </div>
+
+        <div className="flex items-center gap-2">
+          <MapPin className="h-4 w-4 text-blue-400" />
+          <span className="text-white">{route.startPoint}</span>
+          <ChevronDown className="h-3 w-3 rotate-[-90deg] text-gray-500" />
+          <span className="text-white">{route.endPoint}</span>
         </div>
+      </div>
+    </div>
+
+    {/* Línea decorativa de carretera */}
+    <div className="mt-4 border-t border-dashed border-gray-600 relative">
+      <div className="absolute left-1/2 transform -translate-x-1/2 -top-3 bg-[#1A1B1F] px-2 text-xs text-gray-500">
+      
       </div>
     </div>
   </motion.div>
 );
+
 
 const RouteForm: React.FC<{
   onSubmit: (route: Route) => void;
